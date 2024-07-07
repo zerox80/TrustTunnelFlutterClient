@@ -1,8 +1,4 @@
-# vpn
-
-A new Flutter project.
-
-## Getting Started
+# VPN OSS GUI Client apps
 
 После установки нужно выполнить следующие команды:
 
@@ -14,4 +10,4 @@ flutter pub run pigeon \
 
 flutter pub run pigeon \
 --input pigeons/api.dart \
---swift_out ios/Classes/PlatformApi.g.swift 
+--swift_out ios/Classes/PlatformApi.g.swift
