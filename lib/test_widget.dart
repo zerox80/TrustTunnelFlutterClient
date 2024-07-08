@@ -27,6 +27,6 @@ class _TestWidgetState extends State<TestWidget> {
   Future<void> _getPlatformType() async {
     final request = GetPlatformTypeRequest()..testParam = 42;
     final response = await _api.getPlatformType(request);
-    print(response.platformType);
+    debugPrint(response.platformType);
   }
 }
