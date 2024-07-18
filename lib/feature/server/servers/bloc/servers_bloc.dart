@@ -19,7 +19,7 @@ class ServersBloc extends Bloc<ServersEvent, ServersState> {
       emit(
         state.copyWith(
           serverList: List.filled(
-            10,
+            0,
             Object(),
           ),
         ),

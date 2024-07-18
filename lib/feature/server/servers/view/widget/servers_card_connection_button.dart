@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:vpn/common/assets/asset_icons.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/extensions/theme_extensions.dart';
 import 'package:vpn/feature/server/servers/bloc/servers_bloc.dart';
 import 'package:vpn/view/buttons/icon_button_svg.dart';
-import 'package:vpn/view/custom_svg_picture.dart';
 
 class ServersCardConnectionButton extends StatefulWidget {
   final bool isActive;

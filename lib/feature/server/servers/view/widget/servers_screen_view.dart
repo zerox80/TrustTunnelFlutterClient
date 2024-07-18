@@ -6,6 +6,7 @@ import 'package:vpn/common/localization/localization.dart';
 import 'package:vpn/feature/server/server_details/server_details_screen.dart';
 import 'package:vpn/feature/server/servers/bloc/servers_bloc.dart';
 import 'package:vpn/feature/server/servers/view/widget/servers_card.dart';
+import 'package:vpn/feature/server/servers/view/widget/servers_empty_placeholder.dart';
 import 'package:vpn/view/buttons/floating_action_button_svg.dart';
 import 'package:vpn/view/scaffold_wrapper.dart';
 
@@ -21,22 +22,28 @@ class ServersScreenView extends StatelessWidget {
             title: Text(context.ln.servers),
           ),
           body: BlocBuilder<ServersBloc, ServersState>(
-            builder: (context, state) => ListView.separated(
-              itemCount: state.serverList.length,
-              itemBuilder: (_, index) {
-                final item = state.serverList[index];
+            builder: (context, state) => state.serverList.isEmpty
+                ? const ServersEmptyPlaceholder()
+                : ListView.separated(
+                    itemCount: state.serverList.length,
+                    itemBuilder: (_, index) {
+                      final item = state.serverList[index];
 
-                return ServersCard(
-                  server: item,
-                );
-              },
-              separatorBuilder: (_, __) => const Divider(),
-            ),
+                      return ServersCard(
+                        server: item,
+                      );
+                    },
+                    separatorBuilder: (_, __) => const Divider(),
+                  ),
           ),
-          floatingActionButton: FloatingActionButtonSvg.extended(
-            icon: AssetIcons.add,
-            onPressed: () => _pushServerDetailsScreen(context),
-            label: context.ln.addServer,
+          floatingActionButton: BlocBuilder<ServersBloc, ServersState>(
+            builder: (context, state) => state.serverList.isEmpty
+                ? const SizedBox.shrink()
+                : FloatingActionButtonSvg.extended(
+                    icon: AssetIcons.add,
+                    onPressed: () => _pushServerDetailsScreen(context),
+                    label: context.ln.addServer,
+                  ),
           ),
         ),
       );

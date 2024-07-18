@@ -4,5 +4,8 @@
   "servers": "Servers",
   "routing": "Routing",
   "settings": "Settings",
-  "addServer": "Add server"
+  "addServer": "Add server",
+  "serversEmptyTitle": "Create your first server",
+  "serversEmptyDescription": "Create a server for secure and anonymous data transfer",
+  "create": "Create"
 }

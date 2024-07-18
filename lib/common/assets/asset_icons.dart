@@ -16,6 +16,7 @@ abstract class AssetIcons {
   static const check = '${_path}check.svg';
   static const close = '${_path}close.svg';
   static const copy = '${_path}copy.svg';
+  static const datacenter = '${_path}datacenter.svg';
   static const delete = '${_path}delete.svg';
   static const dns = '${_path}dns.svg';
   static const error = '${_path}error.svg';

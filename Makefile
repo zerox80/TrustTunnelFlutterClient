@@ -10,3 +10,7 @@ init:
 	@echo "* Running build runner *"
 	@dart run build_runner build --delete-conflicting-outputs
 	@dart pub run intl_utils:generate
+
+vec:
+	@echo "* Generating vectors from svg *"
+	@vector_graphics_compiler --input-dir=assets/svg --out-dir=assets/vectors
