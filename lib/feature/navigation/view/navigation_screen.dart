@@ -4,7 +4,7 @@ import 'package:vpn/feature/navigation/view/common/navigation_screen_utils.dart'
 import 'package:vpn/feature/navigation/view/widgets/custom_navigation_rail.dart';
 import 'package:vpn/feature/routing/routing/view/routing_screen.dart';
 import 'package:vpn/feature/server/servers/view/servers_screen.dart';
-import 'package:vpn/feature/settings/settings_screen.dart';
+import 'package:vpn/feature/settings/settings_list/settings_screen.dart';
 import 'package:vpn/feature/test/test_screen.dart';
 
 class NavigationScreen extends StatefulWidget {

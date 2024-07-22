@@ -1,0 +1,47 @@
+import 'package:flutter/material.dart';
+import 'package:vpn/common/assets/asset_icons.dart';
+import 'package:vpn/common/extensions/common_extensions.dart';
+import 'package:vpn/common/extensions/context_extensions.dart';
+import 'package:vpn/view/custom_svg_picture.dart';
+
+class CustomArrowListTile extends StatelessWidget {
+  final String title;
+  final VoidCallback onTap;
+
+  const CustomArrowListTile({
+    super.key,
+    required this.title,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return IntrinsicHeight(
+      child: InkWell(
+        onTap: onTap,
+        child: Ink(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 2),
+                    child: Text(title).bodyLarge(context),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                CustomSvgPicture(
+                  icon: AssetIcons.navigateNext,
+                  color: context.colors.gray1,
+                  size: 24,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
