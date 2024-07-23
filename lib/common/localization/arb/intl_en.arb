@@ -50,9 +50,10 @@
   "changeDefaultRoutingModeDialogDescription": "All traffic will be routed by default according to this rule",
   "discardChanges": "Discard changes",
   "discardChangesDialogDescription": "Are you sure you want to discard all changes?",
+  "about": "About",
+  "vpnOss": "VPN OSS",
   "queryLog": "Query log",
   "excludedRoutes": "Excluded routes",
   "followUsOnGithub": "Follow us on Github",
-  "about": "About",
   "typeSomething": "Type something"
 }

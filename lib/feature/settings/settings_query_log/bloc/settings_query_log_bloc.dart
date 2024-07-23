@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vpn/data/model/network_protocol.dart';
-import 'package:vpn/data/model/routing_mode.dart';
 import 'package:vpn/feature/settings/settings_query_log/data/query_log_data.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 part 'settings_query_log_bloc.freezed.dart';
 part 'settings_query_log_event.dart';

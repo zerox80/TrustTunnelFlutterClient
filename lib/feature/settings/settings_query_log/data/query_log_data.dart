@@ -1,6 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vpn/data/model/network_protocol.dart';
-import 'package:vpn/data/model/routing_mode.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 part 'query_log_data.freezed.dart';
 

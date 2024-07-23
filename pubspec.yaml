@@ -22,6 +22,7 @@ dependencies:
   vpn_plugin:
     path: plugins/vpn_plugin
   vector_graphics: ^1.1.11+1
+  package_info_plus: ^4.2.0
 
 dev_dependencies:
   flutter_test:
