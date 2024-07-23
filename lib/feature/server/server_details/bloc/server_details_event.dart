@@ -6,8 +6,8 @@ class ServerDetailsEvent with _$ServerDetailsEvent {
 
   const factory ServerDetailsEvent.dataChanged({
     String? serverName,
-    String? vpnServerIpAddress,
-    String? ipAddressDomain,
+    String? ipAddress,
+    String? domain,
     String? username,
     String? password,
     VpnProtocol? protocol,
@@ -16,9 +16,5 @@ class ServerDetailsEvent with _$ServerDetailsEvent {
     List<String>? dnsServers,
   }) = _DataChanged;
 
-  const factory ServerDetailsEvent.changeLoadingStatus({
-    required ServerDetailsLoadingStatus loadingStatus,
-  }) = _ChangeLoadingStatus;
-
-  const factory ServerDetailsEvent.addServer() = _AddServer;
+  const factory ServerDetailsEvent.submit() = _Submit;
 }

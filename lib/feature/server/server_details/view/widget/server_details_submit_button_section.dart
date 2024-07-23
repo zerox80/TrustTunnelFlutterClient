@@ -5,33 +5,31 @@ import 'package:vpn/common/localization/localization.dart';
 import 'package:vpn/feature/server/server_details/bloc/server_details_bloc.dart';
 
 class ServerDetailsSubmitButtonSection extends StatelessWidget {
+  final int? serverId;
+
   const ServerDetailsSubmitButtonSection({
     super.key,
+    required this.serverId,
   });
 
   @override
   Widget build(BuildContext context) => Column(
-        crossAxisAlignment: context.isMobileBreakpoint
-            ? CrossAxisAlignment.stretch
-            : CrossAxisAlignment.end,
+        crossAxisAlignment: context.isMobileBreakpoint ? CrossAxisAlignment.stretch : CrossAxisAlignment.end,
         children: [
           const Divider(),
           Padding(
             padding: const EdgeInsets.all(16),
             child: FilledButton(
-              onPressed: () => _addServer(context),
+              onPressed: () => _submit(context),
               child: Text(
-                context.read<ServerDetailsBloc>().state.serverId == null
-                    ? context.ln.add
-                    : context.ln.save,
+                serverId == null ? context.ln.add : context.ln.save,
               ),
             ),
           ),
         ],
       );
 
-  void _addServer(BuildContext context) =>
-      context.read<ServerDetailsBloc>().add(
-            const ServerDetailsEvent.addServer(),
-          );
+  void _submit(BuildContext context) => context.read<ServerDetailsBloc>().add(
+        const ServerDetailsEvent.submit(),
+      );
 }

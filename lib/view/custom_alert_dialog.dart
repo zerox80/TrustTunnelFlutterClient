@@ -1,9 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:vpn/common/assets/asset_icons.dart';
 import 'package:vpn/common/extensions/common_extensions.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/data/model/breakpoint.dart';
 import 'package:vpn/view/buttons/icon_button_svg.dart';
-import 'package:flutter/material.dart';
 
 const _titlePadding = EdgeInsets.fromLTRB(24, 24, 24, 16);
 

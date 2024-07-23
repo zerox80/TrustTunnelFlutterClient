@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
-import 'package:vpn/data/model/routing_mode.dart';
 import 'package:vpn/feature/routing/routing_details/bloc/routing_details_bloc.dart';
 import 'package:vpn/view/inputs/custom_text_field.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 class RoutingDetailsForm extends StatelessWidget {
   const RoutingDetailsForm({super.key});

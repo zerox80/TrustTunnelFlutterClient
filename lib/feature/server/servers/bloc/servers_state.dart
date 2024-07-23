@@ -6,5 +6,7 @@ class ServersState with _$ServersState {
 
   const factory ServersState({
     @Default([]) List<Server> serverList,
+    int? selectedServerId,
+    @Default(VpnManagerState.disconnected) VpnManagerState vpnManagerState,
   }) = _ServersState;
 }

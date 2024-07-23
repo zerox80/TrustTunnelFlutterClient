@@ -1,5 +1,5 @@
-import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:flutter/material.dart';
+import 'package:vpn/common/extensions/context_extensions.dart';
 
 class ProgressWrapper extends StatelessWidget {
   final bool isLoading;

@@ -1,57 +1,52 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vpn/data/model/vpn_protocol.dart';
+import 'package:vpn/common/error/error_utils.dart';
+import 'package:vpn/common/error/model/presentation_error.dart';
+import 'package:vpn/common/error/model/presentation_field.dart';
+import 'package:vpn/common/error/model/presentation_field_error.dart';
+import 'package:vpn/data/repository/server_repository.dart';
 import 'package:vpn/feature/server/server_details/data/server_details_data.dart';
+import 'package:vpn/feature/server/server_details/domain/server_details_service.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 part 'server_details_bloc.freezed.dart';
 part 'server_details_event.dart';
 part 'server_details_state.dart';
 
 class ServerDetailsBloc extends Bloc<ServerDetailsEvent, ServerDetailsState> {
-  ServerDetailsBloc({int? serverId})
-      : super(ServerDetailsState(serverId: serverId)) {
+  final ServerRepository _serverRepository;
+  final ServerDetailsService _serverDetailsService;
+
+  ServerDetailsBloc({
+    int? serverId,
+    required ServerRepository serverRepository,
+    required ServerDetailsService serverDetailsService,
+  })  : _serverRepository = serverRepository,
+        _serverDetailsService = serverDetailsService,
+        super(ServerDetailsState(
+          serverId: serverId,
+        )) {
     on<_Init>(_init);
     on<_DataChanged>(_dataChanged);
-    on<_AddServer>(_addServer);
-    on<_ChangeLoadingStatus>(_changeLoadingStatus);
+    on<_Submit>(_submit);
   }
 
   Future<void> _init(
     _Init event,
     Emitter<ServerDetailsState> emit,
   ) async {
-    if (state.serverId == null) {
-      add(
-        const ServerDetailsEvent.changeLoadingStatus(
+    if (state.serverId != null) {
+      final Server server = await _serverRepository.getServerById(id: state.serverId!);
+      final ServerDetailsData initialData = _serverDetailsService.toServerDetailsData(server: server);
+
+      emit(
+        state.copyWith(
+          data: initialData,
+          initialData: initialData,
           loadingStatus: ServerDetailsLoadingStatus.idle,
         ),
       );
-      return;
     }
-    // async request imitation  
-    await Future.delayed(
-      const Duration(milliseconds: 100),
-    );
-    // TODO fetch server details by id
-    ServerDetailsData initialData = ServerDetailsData(
-      serverName: 'server ${state.serverId}',
-      vpnServerIpAddress: '1.1.1.1',
-      ipAddressDomain: '1.1.1.1',
-      username: 'username',
-      password: 'password',
-      protocol: VpnProtocol.http2,
-      // TODO add routingProfile
-      // routingProfile: '',
-      dnsServers: ['1.1.1.1', '2.2.2.2'],
-    );
-
-    emit(
-      state.copyWith(
-        data: initialData,
-        initialData: initialData,
-        loadingStatus: ServerDetailsLoadingStatus.idle,
-      ),
-    );
   }
 
   void _dataChanged(
@@ -59,9 +54,8 @@ class ServerDetailsBloc extends Bloc<ServerDetailsEvent, ServerDetailsState> {
     Emitter<ServerDetailsState> emit,
   ) {
     final serverName = event.serverName ?? state.data.serverName;
-    final vpnServerIpAddress =
-        event.vpnServerIpAddress ?? state.data.vpnServerIpAddress;
-    final ipAddressDomain = event.ipAddressDomain ?? state.data.ipAddressDomain;
+    final ipAddress = event.ipAddress ?? state.data.ipAddress;
+    final domain = event.domain ?? state.data.domain;
     final username = event.username ?? state.data.username;
     final password = event.password ?? state.data.password;
     final protocol = event.protocol ?? state.data.protocol;
@@ -71,8 +65,8 @@ class ServerDetailsBloc extends Bloc<ServerDetailsEvent, ServerDetailsState> {
       state.copyWith(
         data: state.data.copyWith(
           serverName: serverName,
-          vpnServerIpAddress: vpnServerIpAddress,
-          ipAddressDomain: ipAddressDomain,
+          ipAddress: ipAddress,
+          domain: domain,
           username: username,
           password: password,
           protocol: protocol,
@@ -82,20 +76,44 @@ class ServerDetailsBloc extends Bloc<ServerDetailsEvent, ServerDetailsState> {
     );
   }
 
-  void _addServer(
-    _AddServer event,
+  Future<void> _submit(
+    _Submit event,
     Emitter<ServerDetailsState> emit,
-  ) {
-    // TODO add server
-  }
+  ) async {
+    final List<PresentationField> filedErrors = _serverDetailsService.validateData(data: state.data);
 
-  void _changeLoadingStatus(
-    _ChangeLoadingStatus event,
-    Emitter<ServerDetailsState> emit,
-  ) =>
-      emit(
-        state.copyWith(
-          loadingStatus: event.loadingStatus,
-        ),
-      );
+    if (filedErrors.isNotEmpty) {
+      emit(state.copyWith(fieldErrors: filedErrors));
+      return;
+    }
+
+    try {
+      if (state.isEditing) {
+        await _serverRepository.updateServer(
+          request: _serverDetailsService.toUpdateServerRequest(
+            id: state.serverId!,
+            data: state.data,
+          ),
+        );
+      } else {
+        await _serverRepository.addServer(
+          request: _serverDetailsService.toAddServerRequest(
+            data: state.data,
+          ),
+        );
+      }
+
+      emit(state.copyWith(action: const ServerDetailsAction.saved()));
+      emit(state.copyWith(action: const ServerDetailsAction.none()));
+    } catch (e) {
+      final PresentationError error = ErrorUtils.toPresentationError(exception: e);
+
+      if (error is PresentationFieldError) {
+        emit(state.copyWith(fieldErrors: error.fields));
+      }
+
+      emit(state.copyWith(action: ServerDetailsAction.presentationError(error)));
+      emit(state.copyWith(action: const ServerDetailsAction.none()));
+    }
+  }
 }

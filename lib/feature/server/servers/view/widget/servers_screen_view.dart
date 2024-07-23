@@ -23,6 +23,7 @@ class ServersScreenView extends StatelessWidget {
             title: context.ln.servers,
           ),
           body: BlocBuilder<ServersBloc, ServersState>(
+            buildWhen: (previous, current) => previous.serverList != current.serverList,
             builder: (context, state) => state.serverList.isEmpty
                 ? const ServersEmptyPlaceholder()
                 : ListView.separated(

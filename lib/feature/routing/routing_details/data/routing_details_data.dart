@@ -1,5 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vpn/data/model/routing_mode.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 part 'routing_details_data.freezed.dart';
 

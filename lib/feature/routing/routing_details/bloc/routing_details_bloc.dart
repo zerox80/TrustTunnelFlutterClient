@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vpn/data/model/routing_mode.dart';
 import 'package:vpn/feature/routing/routing_details/data/routing_details_data.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 part 'routing_details_bloc.freezed.dart';
 part 'routing_details_event.dart';

@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vpn/common/error/model/enum/presentation_field_name.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
-import 'package:vpn/data/model/vpn_protocol.dart';
+import 'package:vpn/common/utils/validation_utils.dart';
 import 'package:vpn/feature/server/server_details/bloc/server_details_bloc.dart';
 import 'package:vpn/view/inputs/custom_text_field.dart';
 import 'package:vpn/view/menu/custom_dropdown_menu.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 class ServerDetailsForm extends StatefulWidget {
   const ServerDetailsForm({super.key});
@@ -34,25 +36,40 @@ class _ServerDetailsFormState extends State<ServerDetailsForm> {
                       context,
                       serverName: serverName,
                     ),
-                  ),
-                  separator32,
-                  CustomTextField(
-                    value: state.data.vpnServerIpAddress,
-                    label: context.ln.serverDetailsVpnServerIpAddressLabel,
-                    hint: context.ln.enterIpAddressFormatHint,
-                    onChanged: (vpnServerIpAddress) => _onDataChanged(
+                    error: ValidationUtils.getErrorString(
                       context,
-                      vpnServerIpAddress: vpnServerIpAddress,
+                      state.fieldErrors,
+                      PresentationFieldName.serverName,
                     ),
                   ),
                   separator32,
                   CustomTextField(
-                    value: state.data.ipAddressDomain,
+                    value: state.data.ipAddress,
+                    label: context.ln.serverDetailsVpnServerIpAddressLabel,
+                    hint: context.ln.enterIpAddressFormatHint,
+                    onChanged: (ipAddress) => _onDataChanged(
+                      context,
+                      ipAddress: ipAddress,
+                    ),
+                    error: ValidationUtils.getErrorString(
+                      context,
+                      state.fieldErrors,
+                      PresentationFieldName.ipAddress,
+                    ),
+                  ),
+                  separator32,
+                  CustomTextField(
+                    value: state.data.domain,
                     label: context.ln.serverDetailsIpAddressDomainLabel,
                     hint: context.ln.enterIpAddressFormatHint,
-                    onChanged: (ipAddressDomain) => _onDataChanged(
+                    onChanged: (domain) => _onDataChanged(
                       context,
-                      ipAddressDomain: ipAddressDomain,
+                      domain: domain,
+                    ),
+                    error: ValidationUtils.getErrorString(
+                      context,
+                      state.fieldErrors,
+                      PresentationFieldName.domain,
                     ),
                   ),
                   separator32,
@@ -64,6 +81,11 @@ class _ServerDetailsFormState extends State<ServerDetailsForm> {
                       context,
                       username: username,
                     ),
+                    error: ValidationUtils.getErrorString(
+                      context,
+                      state.fieldErrors,
+                      PresentationFieldName.userName,
+                    ),
                   ),
                   separator32,
                   CustomTextField(
@@ -73,6 +95,11 @@ class _ServerDetailsFormState extends State<ServerDetailsForm> {
                     onChanged: (password) => _onDataChanged(
                       context,
                       password: password,
+                    ),
+                    error: ValidationUtils.getErrorString(
+                      context,
+                      state.fieldErrors,
+                      PresentationFieldName.password,
                     ),
                   ),
                   separator32,
@@ -118,6 +145,11 @@ class _ServerDetailsFormState extends State<ServerDetailsForm> {
                       context,
                       dnsServers: dns.trim().split('\n'),
                     ),
+                    error: ValidationUtils.getErrorString(
+                      context,
+                      state.fieldErrors,
+                      PresentationFieldName.dnsServers,
+                    ),
                   ),
                 ],
               );
@@ -131,8 +163,8 @@ class _ServerDetailsFormState extends State<ServerDetailsForm> {
   void _onDataChanged(
     BuildContext context, {
     String? serverName,
-    String? vpnServerIpAddress,
-    String? ipAddressDomain,
+    String? ipAddress,
+    String? domain,
     String? username,
     String? password,
     VpnProtocol? protocol,
@@ -140,8 +172,8 @@ class _ServerDetailsFormState extends State<ServerDetailsForm> {
   }) =>
       context.read<ServerDetailsBloc>().add(ServerDetailsEvent.dataChanged(
             serverName: serverName,
-            vpnServerIpAddress: vpnServerIpAddress,
-            ipAddressDomain: ipAddressDomain,
+            ipAddress: ipAddress,
+            domain: domain,
             username: username,
             password: password,
             protocol: protocol,

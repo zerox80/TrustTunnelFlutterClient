@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/extensions/theme_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
-import 'package:vpn/data/model/routing_mode.dart';
 import 'package:vpn/view/custom_alert_dialog.dart';
 import 'package:vpn/view/menu/custom_dropdown_menu.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 class RoutingDetailsChangeRoutingDialog extends StatefulWidget {
   final ValueChanged<RoutingMode> onSavePressed;
@@ -17,12 +17,10 @@ class RoutingDetailsChangeRoutingDialog extends StatefulWidget {
   });
 
   @override
-  State<RoutingDetailsChangeRoutingDialog> createState() =>
-      _RoutingDetailsChangeRoutingDialogState();
+  State<RoutingDetailsChangeRoutingDialog> createState() => _RoutingDetailsChangeRoutingDialogState();
 }
 
-class _RoutingDetailsChangeRoutingDialogState
-    extends State<RoutingDetailsChangeRoutingDialog> {
+class _RoutingDetailsChangeRoutingDialogState extends State<RoutingDetailsChangeRoutingDialog> {
   late RoutingMode _selectedRoutingMode = widget.currentRoutingMode;
 
   @override
@@ -50,8 +48,7 @@ class _RoutingDetailsChangeRoutingDialogState
           ),
           Theme(
             data: context.theme.copyWith(
-              textButtonTheme:
-                  context.theme.extension<CustomTextButtonTheme>()!.success,
+              textButtonTheme: context.theme.extension<CustomTextButtonTheme>()!.success,
             ),
             child: TextButton(
               onPressed: () {

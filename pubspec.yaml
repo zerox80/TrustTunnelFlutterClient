@@ -18,6 +18,7 @@ dependencies:
   cupertino_icons: ^1.0.6
   flutter_svg: 2.0.3
   flutter_bloc: ^8.0.1
+  rxdart: ^0.27.7
   vpn_plugin:
     path: plugins/vpn_plugin
   vector_graphics: ^1.1.11+1

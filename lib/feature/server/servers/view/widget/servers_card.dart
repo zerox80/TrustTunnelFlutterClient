@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
-import 'package:vpn/data/model/server.dart';
-import 'package:vpn/data/model/vpn_manager_state.dart';
 import 'package:vpn/feature/server/server_details/view/server_details_screen.dart';
+import 'package:vpn/feature/server/servers/bloc/servers_bloc.dart';
 import 'package:vpn/feature/server/servers/view/widget/servers_card_connection_button.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 class ServersCard extends StatelessWidget {
   final Server server;
@@ -55,10 +56,19 @@ class ServersCard extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: ServersCardConnectionButton(
-                // TODO use real connection info
-                vpnManagerState: VpnManagerState.disconnected,
-                server: server,
+              child: BlocBuilder<ServersBloc, ServersState>(
+                buildWhen: (previous, current) =>
+                    previous.selectedServerId != current.selectedServerId ||
+                    previous.vpnManagerState != current.vpnManagerState,
+                builder: (context, state) {
+                  final vpnManagerState =
+                      state.selectedServerId == server.id ? state.vpnManagerState : VpnManagerState.disconnected;
+
+                  return ServersCardConnectionButton(
+                    vpnManagerState: vpnManagerState,
+                    serverId: server.id,
+                  );
+                },
               ),
             ),
           ],

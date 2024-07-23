@@ -5,10 +5,10 @@
 // platforms in the `pubspec.yaml` at
 // https://flutter.dev/docs/development/packages-and-plugins/developing-packages#plugin-platforms.
 
-import 'vpn_plugin_platform_interface.dart';
+import 'package:flutter/services.dart';
 
 class VpnPlugin {
-  Future<String?> getPlatformVersion() {
-    return VpnPluginPlatform.instance.getPlatformVersion();
-  }
+  static const _eventChannelName = "vpn_plugin_event_channel";
+
+  static const EventChannel eventChannel = EventChannel(_eventChannelName);
 }

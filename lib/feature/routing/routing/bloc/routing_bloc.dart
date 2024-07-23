@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:vpn/data/model/routing_mode.dart';
-import 'package:vpn/data/model/routing_profile.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 part 'routing_bloc.freezed.dart';
 part 'routing_event.dart';
@@ -18,7 +17,7 @@ class RoutingBloc extends Bloc<RoutingEvent, RoutingState> {
     Emitter<RoutingState> emit,
   ) {
     // TODO implement routing init
-    const defaultRoutingProfile = RoutingProfile(
+    final defaultRoutingProfile = RoutingProfile(
       id: 0,
       name: 'Default profile',
       defaultMode: RoutingMode.vpn,

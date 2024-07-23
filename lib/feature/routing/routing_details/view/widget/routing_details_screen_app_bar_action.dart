@@ -4,11 +4,11 @@ import 'package:vpn/common/assets/asset_icons.dart';
 import 'package:vpn/common/extensions/common_extensions.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
-import 'package:vpn/data/model/routing_mode.dart';
 import 'package:vpn/feature/routing/routing_details/bloc/routing_details_bloc.dart';
 import 'package:vpn/feature/routing/routing_details/view/widget/routing_details_change_routing_dialog.dart';
 import 'package:vpn/feature/routing/routing_details/view/widget/routing_details_delete_rules_dialog.dart';
 import 'package:vpn/view/custom_svg_picture.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 class RoutingDetailsScreenAppBarAction extends StatelessWidget {
   const RoutingDetailsScreenAppBarAction({
@@ -73,8 +73,7 @@ class RoutingDetailsScreenAppBarAction extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => RoutingDetailsChangeRoutingDialog(
-        onSavePressed: (mode) =>
-            _onChangeDefaultRoutingModeSubmit(bloc: bloc, mode: mode),
+        onSavePressed: (mode) => _onChangeDefaultRoutingModeSubmit(bloc: bloc, mode: mode),
         currentRoutingMode: bloc.state.data.defaultMode,
       ),
     );

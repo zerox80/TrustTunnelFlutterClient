@@ -1,4 +1,5 @@
 import 'package:vpn/di/factory/repository_factory.dart';
+import 'package:vpn/di/factory/service_factory.dart';
 import 'package:vpn/feature/routing/routing/bloc/routing_bloc.dart';
 import 'package:vpn/feature/routing/routing_details/bloc/routing_details_bloc.dart';
 import 'package:vpn/feature/server/server_details/bloc/server_details_bloc.dart';
@@ -13,16 +14,21 @@ abstract class BlocFactory {
 
 class BlocFactoryImpl implements BlocFactory {
   final RepositoryFactory _repositoryFactory;
+  final ServiceFactory _serviceFactory;
 
   BlocFactoryImpl({
     required RepositoryFactory repositoryFactory,
-  }) : _repositoryFactory = repositoryFactory;
+    required ServiceFactory serviceFactory,
+  })  : _serviceFactory = serviceFactory,
+        _repositoryFactory = repositoryFactory;
 
   @override
   RoutingBloc routingBloc() => RoutingBloc();
 
   @override
-  ServersBloc serversBloc() => ServersBloc();
+  ServersBloc serversBloc() => ServersBloc(
+        serverRepository: _repositoryFactory.serverRepository,
+      );
 
   @override
   ServerDetailsBloc serverDetailsBloc({
@@ -30,6 +36,8 @@ class BlocFactoryImpl implements BlocFactory {
   }) =>
       ServerDetailsBloc(
         serverId: serverId,
+        serverRepository: _repositoryFactory.serverRepository,
+        serverDetailsService: _serviceFactory.serverDetailsService,
       );
 
   @override

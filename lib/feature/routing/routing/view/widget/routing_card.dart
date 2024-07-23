@@ -4,11 +4,11 @@ import 'package:vpn/common/assets/asset_icons.dart';
 import 'package:vpn/common/extensions/common_extensions.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
-import 'package:vpn/data/model/routing_profile.dart';
 import 'package:vpn/feature/routing/routing/bloc/routing_bloc.dart';
 import 'package:vpn/feature/routing/routing_details/view/routing_details_screen.dart';
 import 'package:vpn/view/common/custom_radio_list_tile.dart';
 import 'package:vpn/view/custom_svg_picture.dart';
+import 'package:vpn_plugin/platform_api.g.dart';
 
 class RoutingCard extends StatelessWidget {
   final RoutingProfile routingProfile;
@@ -20,13 +20,11 @@ class RoutingCard extends StatelessWidget {
     required this.routingState,
   });
 
-  bool get isDefaultProfile =>
-      routingProfile == routingState.defaultRoutingProfile;
+  bool get isDefaultProfile => routingProfile == routingState.defaultRoutingProfile;
   bool get isOnlyProfile => routingState.allRoutingProfiles.length == 1;
 
   @override
-  Widget build(BuildContext context) =>
-      CustomRadioListTile<RoutingProfile?>.titleWidget(
+  Widget build(BuildContext context) => CustomRadioListTile<RoutingProfile?>.titleWidget(
         showRadioButton: !isOnlyProfile,
         enableTap: !isOnlyProfile,
         titleWidget: Text(
