@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
+import 'package:vpn/feature/settings/settings_excluded_routes/view/settings_excluded_routes_screen.dart';
 import 'package:vpn/feature/settings/settings_query_log/view/settings_query_log_screen.dart';
 import 'package:vpn/view/common/custom_arrow_list_tile.dart';
 import 'package:vpn/view/custom_app_bar.dart';
@@ -24,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
               const Divider(),
               CustomArrowListTile(
                 title: context.ln.excludedRoutes,
-                onTap: _pushExcludedRoutesScreen,
+                onTap: () => _pushExcludedRoutesScreen(context),
               ),
               const Divider(),
               CustomArrowListTile(
@@ -45,8 +46,9 @@ class SettingsScreen extends StatelessWidget {
         const SettingsQueryLogScreen(),
       );
 
-  // TODO: Implement method to push excluded routes screen
-  void _pushExcludedRoutesScreen() {}
+  void _pushExcludedRoutesScreen(BuildContext context) => context.push(
+        const SettingsExcludedRoutesScreen(),
+      );
 
   // TODO: Implement method to open GitHub organization
   void _openGithubOrganization() {}

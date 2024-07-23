@@ -53,5 +53,6 @@
   "queryLog": "Query log",
   "excludedRoutes": "Excluded routes",
   "followUsOnGithub": "Follow us on Github",
-  "about": "About"
+  "about": "About",
+  "typeSomething": "Type something"
 }
