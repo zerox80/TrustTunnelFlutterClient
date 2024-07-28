@@ -48,3 +48,5 @@ lib/common/localization/generated/
 **.g.dart
 **.g.kt
 **.g.swift
+**.g.cpp
+**.g.h
