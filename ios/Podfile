@@ -1,5 +1,5 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '13.0'
+platform :ios, '14.0'
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -27,6 +27,8 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 
 flutter_ios_podfile_setup
 
+pod 'TrustTunnelClient', :podspec => 'https://github.com/TrustTunnel/TrustTunnelClient/releases/download/v0.99.22-apple/TrustTunnelClient.podspec'
+
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
@@ -35,6 +37,10 @@ target 'Runner' do
   target 'RunnerTests' do
     inherit! :search_paths
   end
+end
+
+target 'Extension' do
+  use_frameworks!
 end
 
 post_install do |installer|
