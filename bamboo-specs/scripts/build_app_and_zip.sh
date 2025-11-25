@@ -17,4 +17,5 @@ fi
 
 make .dart_tool/build/entrypoint/build.dart
 
+cd ios
 bundle exec fastlane build_simulator_app_and_zip

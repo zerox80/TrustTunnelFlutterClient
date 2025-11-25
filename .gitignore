@@ -78,4 +78,5 @@ lib/common/localization/generated/
 **/fastlane/AppStoreApiInfo.json
 **/Gemfile.lock
 **/Podfile.lock
+**/.bundle
 

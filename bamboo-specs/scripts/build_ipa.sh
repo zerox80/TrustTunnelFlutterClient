@@ -17,14 +17,15 @@ if [ "$upload_symbols" == "" ]; then
 fi
 
 
-
+cd ios
 bundle exec fastlane sync_certs_and_profiles type:"$build_type"
 if [ "$build_type" != "appstore" ]; then
     echo "Build type is not 'appstore', so we need to download 'appstore' profiles to build an app, also."
     echo "That's an 'xcodebuild' command feature which is used by fastlane to build an app."
     bundle exec fastlane sync_certs_and_profiles type:appstore readonly:true
 fi
-
+cd ..
 make .dart_tool/build/entrypoint/build.dart
 
+cd ios
 bundle exec fastlane build_ipa type:"$build_type" upload_symbols:"$upload_symbols"

@@ -33,9 +33,10 @@ echo "$changelog_text" >> "${PWD}/changelog.txt"
 
 
 
-echo "${bamboo_fastlaneAppStoreApiInfoSecret}" | base64 --decode > "${project_dir}/fastlane/AppStoreApiInfo.json"
-echo "${bamboo_fastlaneEnvSecret}" | base64 --decode > "${project_dir}/fastlane/.env"
+echo "${bamboo_fastlaneAppStoreApiInfoSecret}" | base64 --decode > "${project_dir}/ios/fastlane/AppStoreApiInfo.json"
+echo "${bamboo_fastlaneEnvSecret}" | base64 --decode > "${project_dir}/ios/fastlane/.env"
 
+cd ios
 # Configure bundler
 bundle config set --local path '.bundle/vendor'
 bundle install
