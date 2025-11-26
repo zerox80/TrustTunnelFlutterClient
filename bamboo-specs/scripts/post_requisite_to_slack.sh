@@ -20,8 +20,8 @@ if [ "$slack_kit" == "" ]; then
 fi
 
 # Let's define all necessary variables
-slack_channel="#adguard-qa-mobile-builds"
-uniq_name="AdGuard VPN for iOS"
+slack_channel="#trusttunnel-qa-flutter-builds"
+uniq_name="TrustTunnel for iOS"
 text=`cat <<EOF
 _*## ${uniq_name} \\\`[${build_channel}]\\\`*_ :apple-grey:
 
@@ -54,7 +54,7 @@ else
     need_send_changelog=true
 fi
 
-python3 "$slack_kit" -f "AdGuard VPN.app.zip" -m "$text" -fn "AdGuard VPN.app.zip" -c "$slack_channel" -pin -unpin "${uniq_name}" "${build_channel}"
+python3 "$slack_kit" -f "TrustTunnel.app.zip" -m "$text" -fn "TrustTunnel.app.zip" -c "$slack_channel" -pin -unpin "${uniq_name}" "${build_channel}"
 if [ $? -eq 1 ]; then
     exit 1
 fi
