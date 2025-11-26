@@ -65,7 +65,7 @@ Building and publishing:
     - script: cp "trusttunnel/build/TrustTunnel.ipa" "trusttunnel/TrustTunnel.ipa"
     - script: trusttunnel/bamboo-specs/scripts/build_app_and_zip.sh "${bamboo_build_channel}"
     - script: cp "trusttunnel/build/TrustTunnel.app.zip" "trusttunnel/TrustTunnel.app.zip"
-   # - script: trusttunnel/bamboo-specs/scripts/post_requisite_to_slack.sh "${bamboo_build_channel}" "${bamboo_working_directory}/slack-scripts/slack_kit.py"
+    - script: trusttunnel/bamboo-specs/scripts/post_requisite_to_slack.sh "${bamboo_build_channel}" "${bamboo_working_directory}/slack-scripts/slack_kit.py"
   final-tasks:
     - script: find . -mindepth 1 \( -path "./trusttunnel/TrustTunnel.ipa" -o -path "./trusttunnel/TrustTunnel.app.zip" -o -path "./trusttunnel/changelog.txt" -o -path "./trusttunnel/qa_changelog.md" -o -path "./trusttunnel/variables.txt" \) -o -delete; exit 0
   artifacts:
