@@ -2,8 +2,10 @@
 
 
 gen:
-	@echo "* Running build runner *"
+	@echo "* Starting code generation... *"
 	@dart run build_runner build --delete-conflicting-outputs
+	@$(MAKE) -C plugins/vpn_plugin gen
+	@echo "* Code generation successful *"
 
 ln:
 	@echo "* Generating localizations *"
@@ -17,6 +19,7 @@ init:
 	@echo "* Running build runner *"
 	@dart run build_runner build --delete-conflicting-outputs
 	@dart pub run intl_utils:generate
+	@$(MAKE) -C plugins/vpn_plugin init
 
 .dart_tool/package_config.json: pubspec.yaml pubspec.lock
 	@echo "* Resolving dependencies... *"

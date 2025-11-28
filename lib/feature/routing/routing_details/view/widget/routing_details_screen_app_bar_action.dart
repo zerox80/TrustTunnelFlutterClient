@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vpn/common/assets/asset_icons.dart';
-import 'package:vpn/common/extensions/common_extensions.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
 import 'package:vpn/data/model/routing_mode.dart';
@@ -29,7 +28,10 @@ class RoutingDetailsScreenAppBarAction extends StatelessWidget {
               icon: AssetIcons.update,
             ),
             const SizedBox(width: 12),
-            Text(context.ln.changeDefaultRoutingMode).bodyLarge(context),
+            Text(
+              context.ln.changeDefaultRoutingMode,
+              style: context.textTheme.bodyLarge,
+            ),
           ],
         ),
       ),

@@ -61,6 +61,7 @@ class RoutingDetailsBloc extends Bloc<RoutingDetailsEvent, RoutingDetailsState> 
             loadingStatus: RoutingDetailsLoadingStatus.idle,
           ),
         );
+
         return;
       } catch (e) {
         _onException(emit, e);
@@ -109,10 +110,10 @@ class RoutingDetailsBloc extends Bloc<RoutingDetailsEvent, RoutingDetailsState> 
     }
   }
 
-  Future<void> _dataChanged(
+  void _dataChanged(
     _DataChanged event,
     Emitter<RoutingDetailsState> emit,
-  ) async {
+  ) {
     emit(
       state.copyWith(
         data: state.data.copyWith(
@@ -190,17 +191,17 @@ class RoutingDetailsBloc extends Bloc<RoutingDetailsEvent, RoutingDetailsState> 
     emit(state.copyWith(action: const RoutingDetailsAction.none()));
   }
 
-  Future<void> _onException(
+  void _onException(
     Emitter<RoutingDetailsState> emit,
     Object exception,
-  ) async {
+  ) {
     final PresentationError error = ErrorUtils.toPresentationError(exception: exception);
 
     emit(state.copyWith(action: RoutingDetailsAction.presentationError(error)));
     emit(state.copyWith(action: const RoutingDetailsAction.none()));
   }
 
-  Future<void> _updateProfile(RoutingDetailsData data, int routingId) async => Future.wait([
+  Future<void> _updateProfile(RoutingDetailsData data, int routingId) => Future.wait([
     _routingRepository.setDefaultRoutingMode(id: routingId, mode: data.defaultMode),
 
     _routingRepository.setRules(

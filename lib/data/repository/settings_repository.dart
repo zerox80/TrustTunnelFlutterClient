@@ -12,22 +12,22 @@ abstract class SettingsRepository {
 }
 
 class SettingsRepositoryImpl implements SettingsRepository {
-  final SettingsDatasource _settingsDatasource;
+  final SettingsDataSource _settingsDataSource;
 
   SettingsRepositoryImpl({
-    required SettingsDatasource settingsDatasource,
-  }) : _settingsDatasource = settingsDatasource;
+    required SettingsDataSource settingsDataSource,
+  }) : _settingsDataSource = settingsDataSource;
 
   @override
   Future<List<VpnRequest>> getAllRequests() async {
-    final requests = await _settingsDatasource.getAllRequests();
+    final requests = await _settingsDataSource.getAllRequests();
 
     return requests;
   }
 
   @override
-  Future<String> getExcludedRoutes() => _settingsDatasource.getExcludedRoutes();
+  Future<String> getExcludedRoutes() => _settingsDataSource.getExcludedRoutes();
 
   @override
-  Future<void> setExcludedRoutes(String routes) => _settingsDatasource.setExcludedRoutes(routes);
+  Future<void> setExcludedRoutes(String routes) => _settingsDataSource.setExcludedRoutes(routes);
 }

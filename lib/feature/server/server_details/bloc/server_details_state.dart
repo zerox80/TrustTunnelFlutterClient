@@ -2,8 +2,6 @@ part of 'server_details_bloc.dart';
 
 @freezed
 abstract class ServerDetailsState with _$ServerDetailsState {
-  const ServerDetailsState._();
-
   const factory ServerDetailsState({
     int? serverId,
     @Default(ServerDetailsData()) ServerDetailsData data,
@@ -13,6 +11,8 @@ abstract class ServerDetailsState with _$ServerDetailsState {
     @Default([]) List<PresentationField> fieldErrors,
     @Default(<RoutingProfile>[]) List<RoutingProfile> availableRoutingProfiles,
   }) = _ServersDetailsState;
+
+  const ServerDetailsState._();
 
   bool get isEditing => serverId != null;
 

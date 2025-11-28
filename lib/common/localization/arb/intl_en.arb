@@ -112,5 +112,9 @@
       }
     }
   },
-  "allRulesDeleted": "All rules deleted"
+  "allRulesDeleted": "All rules deleted",
+  "quic": "QUIC",
+  "http2": "HTTP/2",
+  "bypass": "Bypass",
+  "vpn": "Vpn"
 }

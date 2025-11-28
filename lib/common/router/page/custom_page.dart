@@ -1,6 +1,14 @@
 import 'package:flutter/widgets.dart';
 
 abstract class CustomPageRoute<T> extends ModalRoute<T> implements PageRoute<T> {
+  @override
+  final bool fullscreenDialog;
+
+  @override
+  final bool allowSnapshotting;
+
+  final bool _barrierDismissible;
+
   CustomPageRoute({
     super.settings,
     this.fullscreenDialog = false,
@@ -10,18 +18,10 @@ abstract class CustomPageRoute<T> extends ModalRoute<T> implements PageRoute<T> 
   }) : _barrierDismissible = barrierDismissible;
 
   @override
-  final bool fullscreenDialog;
-
-  @override
-  final bool allowSnapshotting;
-
-  @override
   bool get opaque => true;
 
   @override
   bool get barrierDismissible => _barrierDismissible;
-
-  final bool _barrierDismissible;
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) => nextRoute is PageRoute;

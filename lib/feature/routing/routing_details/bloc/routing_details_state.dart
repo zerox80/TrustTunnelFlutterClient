@@ -2,8 +2,6 @@ part of 'routing_details_bloc.dart';
 
 @freezed
 sealed class RoutingDetailsState with _$RoutingDetailsState {
-  const RoutingDetailsState._();
-
   const factory RoutingDetailsState({
     int? routingId,
     @Default('') String routingName,
@@ -13,6 +11,8 @@ sealed class RoutingDetailsState with _$RoutingDetailsState {
     @Default(RoutingDetailsAction.none()) RoutingDetailsAction action,
     @Default(false) bool hasInvalidRules,
   }) = _RoutingDetailsState;
+
+  const RoutingDetailsState._();
 
   DeepCollectionEquality get _collectionEquality => const DeepCollectionEquality();
 

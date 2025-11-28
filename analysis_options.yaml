@@ -5,11 +5,17 @@ formatter:
   page_width: 120
 
 analyzer:
+  plugins:
+    - drift
   exclude:
     - .fvm/**
     - build/**
+    - lib/common/localization/generated/**
+    - lib/data/api/swagger/**
     - '**.freezed.dart'
+    - '**.sensitive.dart'
     - '**.g.dart'
+    - packages/**
   language:
     strict-raw-types: true
     strict-casts: true
@@ -92,3 +98,95 @@ linter:
     prefer_final_fields: true
     type_literal_in_constant_pattern: false
     
+dart_code_metrics:
+  formatter:
+    line-length: 120
+  rules:
+    - member-ordering:
+        alphabetize: false
+        order:
+          # static fields
+          - public-static-const-fields
+          - private-static-const-fields
+          - public-static-final-fields
+          - private-static-final-fields
+          - public-static-fields
+          - private-static-fields
+          # initialized via constructor
+          - final-public-fields
+          - final-private-fields
+          # constructors
+          - constructors
+          - named-constructors
+          - factory-constructors
+          # static getters, methods
+          - public-static-getters
+          - private-static-getters
+          - public-static-methods
+          - private-static-methods
+          # fields
+          - late-final-public-fields
+          - late-final-private-fields
+          - late-public-fields
+          - late-private-fields
+          - final-public-initialized-fields
+          - final-private-initialized-fields
+          - public-initialized-fields
+          - private-initialized-fields
+          - public-nullable-fields
+          - private-nullable-fields
+          # getters and setters
+          - getters-setters
+          # methods
+          - init-method
+          - overridden-methods
+          - public-methods
+          - dispose-method
+          - close-method
+          - private-methods
+        widgets-order:
+          # lifecycle
+          - init-state-method
+          - did-change-dependencies-method
+          - did-update-widget-method
+          - build-method
+          # other methods
+          - public-methods
+          - private-methods
+          
+          - dispose-method
+
+    - match-class-name-pattern:
+        entries:
+          # State name must end with "State"
+          - path: ".*state.dart"
+            pattern: ".*State$"
+
+          # Event name must end with "Event"
+          - path: ".*event.dart"
+            pattern: ".*Event$"
+
+          # Bloc name must end with "Bloc"
+          - path: ".*bloc.dart"
+            pattern: ".*Bloc$"
+
+    - newline-before-return:
+        exclude:
+          - "scripts/**"
+    
+    - avoid-cubits
+    - proper-super-calls
+    - no-boolean-literal-compare
+    - avoid-stateless-widget-initialized-fields
+    - avoid-bloc-public-fields
+    - avoid-bloc-public-methods
+    - handle-bloc-event-subclasses
+    - prefer-trailing-comma
+    - avoid-unnecessary-constructor
+    - prefer-constrained-box-over-container
+    - prefer-align-over-container
+    - prefer-transform-over-container
+    - prefer-padding-over-container
+
+  pubspec-rules:
+    - prefer-pinned-version-syntax

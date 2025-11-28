@@ -116,6 +116,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
           )
         : null;
+
     return FocusScope(
       node: _focusNode,
       skipTraversal: !widget.enabled,

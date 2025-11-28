@@ -11,25 +11,25 @@ abstract class VpnRepository {
 }
 
 class VpnRepositoryImpl implements VpnRepository {
-  final VpnDatasource _vpnDatasource;
+  final VpnDataSource _vpnDataSource;
 
   VpnRepositoryImpl({
-    required VpnDatasource vpnDatasource,
-  }) : _vpnDatasource = vpnDatasource;
+    required VpnDataSource vpnDataSource,
+  }) : _vpnDataSource = vpnDataSource;
 
   @override
   Future<Stream<VpnState>> startListenToStates({
     required Server server,
     required RoutingProfile routingProfile,
   }) async {
-    await _vpnDatasource.start(
+    await _vpnDataSource.start(
       server: server,
       routingProfile: routingProfile,
     );
 
-    return _vpnDatasource.vpnState;
+    return _vpnDataSource.vpnState;
   }
 
   @override
-  Future<void> stop() => _vpnDatasource.stop();
+  Future<void> stop() => _vpnDataSource.stop();
 }

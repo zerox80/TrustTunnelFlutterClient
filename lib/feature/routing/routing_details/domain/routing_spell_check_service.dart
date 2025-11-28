@@ -24,9 +24,6 @@ class RoutingSpellCheckService implements SpellCheckService {
 
   final _tokenizer = RegExp(r'\S+');
 
-  bool _isValidToken(String s) =>
-      _plainIp.hasMatch(s) || _ipv4WithPort.hasMatch(s) || _ipv4Cidr.hasMatch(s) || _domain.hasMatch(s);
-
   @override
   Future<List<SuggestionSpan>?> fetchSpellCheckSuggestions(_, String text) async {
     final invalidSpans = <SuggestionSpan>[];
@@ -48,4 +45,7 @@ class RoutingSpellCheckService implements SpellCheckService {
 
     return invalidSpans;
   }
+
+  bool _isValidToken(String s) =>
+      _plainIp.hasMatch(s) || _ipv4WithPort.hasMatch(s) || _ipv4Cidr.hasMatch(s) || _domain.hasMatch(s);
 }

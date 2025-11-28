@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vpn/common/assets/asset_icons.dart';
-import 'package:vpn/common/extensions/common_extensions.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/view/custom_icon.dart';
 
@@ -26,7 +25,10 @@ class CustomArrowListTile extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 2),
-                  child: Text(title).bodyLarge(context),
+                  child: Text(
+                    title,
+                    style: context.textTheme.bodyLarge,
+                  ),
                 ),
               ),
               const SizedBox(width: 16),

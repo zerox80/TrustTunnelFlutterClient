@@ -5,10 +5,10 @@ import 'package:vpn/data/model/raw/add_server_request.dart';
 import 'package:vpn/data/model/raw/raw_server.dart';
 import 'package:vpn/data/model/vpn_protocol.dart';
 
-class ServerLocalDatasource implements ServerDatasource {
+class ServerDataSourceImpl implements ServerDataSource {
   final db.AppDatabase database;
 
-  ServerLocalDatasource({
+  ServerDataSourceImpl({
     required this.database,
   });
 

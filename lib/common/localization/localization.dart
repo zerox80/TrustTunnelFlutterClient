@@ -4,14 +4,14 @@ import 'package:vpn/common/localization/generated/l10n.dart';
 import 'package:vpn/common/localization/locale_type.dart';
 
 final class Localization {
-  const Localization._();
+  static const _delegate = AppLocalizations.delegate;
 
   /// Такой подход необходим в связи с тем
   /// что приложение не должно предусматривать смену языка устройства
   /// во время его работы, лишь при перезапуске.
   static Locale? _deviceLocale;
 
-  static const _delegate = AppLocalizations.delegate;
+  const Localization._();
 
   /// List of supported locales.
   static List<Locale> get supportedLocales => _delegate.supportedLocales;
@@ -43,12 +43,12 @@ final class Localization {
     return LocaleType.en.value!;
   }
 
+  static bool get isDeviceLocaleSupported => _delegate.isSupported(deviceLocale);
+
   static Future<AppLocalizations> load(Locale locale) => AppLocalizations.load(locale);
 
   /// Obtain [AppLocalizations] instance from [BuildContext].
   static AppLocalizations of(BuildContext context) => AppLocalizations.of(context);
-
-  static bool get isDeviceLocaleSupported => _delegate.isSupported(deviceLocale);
 }
 
 extension LocalizationContext on BuildContext {

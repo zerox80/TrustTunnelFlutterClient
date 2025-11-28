@@ -9,30 +9,33 @@ import 'package:vpn/feature/initialization/initialization_bloc.dart';
 import 'package:vpn/feature/vpn/widgets/vpn_scope.dart';
 
 void main() {
-  runZonedGuarded(() {
-    final initializationBloc = InitializationBloc(initializationHelper: InitializationHelperIo())
-      ..add(const InitializationEvent.init());
+  runZonedGuarded(
+    () {
+      final initializationBloc = InitializationBloc(initializationHelper: InitializationHelperIo())
+        ..add(const InitializationEvent.init());
 
-    initializationBloc.stream.listen(
-      (state) {
-        final result = state.initializationResult;
+      initializationBloc.stream.listen(
+        (state) {
+          final result = state.initializationResult;
 
-        if (result != null) {
-          runApp(
-            DependencyScope(
-              dependenciesFactory: result.dependenciesFactory,
-              blocFactory: result.blocFactory,
-              repositoryFactory: result.repositoryFactory,
-              child: VpnScope(
-                vpnRepository: result.repositoryFactory.vpnRepository,
-                child: const App(),
+          if (result != null) {
+            runApp(
+              DependencyScope(
+                dependenciesFactory: result.dependenciesFactory,
+                blocFactory: result.blocFactory,
+                repositoryFactory: result.repositoryFactory,
+                child: VpnScope(
+                  vpnRepository: result.repositoryFactory.vpnRepository,
+                  child: const App(),
+                ),
               ),
-            ),
-          );
-        }
-      },
-    );
-  }, (e, st) {
-    print("Error catched in main thread $e");
-  });
+            );
+          }
+        },
+      );
+    },
+    (e, st) {
+      print("Error catched in main thread $e");
+    },
+  );
 }

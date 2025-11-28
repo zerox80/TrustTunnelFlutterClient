@@ -41,6 +41,7 @@ class _ArbParserBaseState extends State<ArbParserBase> {
 
   List<ArbItem> _parseArb(String data) {
     final dom.Document document = parse(data);
+
     return _parseNodes(document.body?.nodes ?? []);
   }
 
@@ -49,6 +50,7 @@ class _ArbParserBaseState extends State<ArbParserBase> {
     for (final node in nodes) {
       items.addAll(_parseNode(node));
     }
+
     return items;
   }
 
@@ -71,6 +73,7 @@ class _ArbParserBaseState extends State<ArbParserBase> {
           throw UnimplementedError('Unknown node type: ${node.localName}');
       }
     }
+
     return items;
   }
 }

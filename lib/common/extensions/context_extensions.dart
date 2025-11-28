@@ -66,8 +66,19 @@ extension SnackBarExtension on BuildContext {
 extension NavigatorExtension on BuildContext {
   void pop() => Navigator.of(this).pop();
 
+  WidgetBuilder _getWidgetBuilder(BuildContext context, Widget widget) {
+    final parentScaffoldMessenger = ScaffoldMessenger.maybeOf(context);
+
+    return (innerContext) => ScaffoldMessengerProvider(
+      value: parentScaffoldMessenger ?? ScaffoldMessenger.of(innerContext),
+      child: widget,
+    );
+  }
+
   Future<T?> push<T extends Object?>(Widget widget) => Navigator.of(this).push(
-    CommonUtils.getRoute(this, widget),
+    MaterialPageRoute<T>(
+      builder: (innerContext) => _getWidgetBuilder(this, widget).call(innerContext),
+    ),
   );
 }
 
@@ -81,7 +92,7 @@ extension RouterExtension on BuildContext {
     Duration? reverseTransitionDuration,
     bool replace = false,
     bool rootNavigator = true,
-  }) async {
+  }) {
     final actualNavigator = Navigator.of(this, rootNavigator: rootNavigator);
     final result = replace
         ? actualNavigator.pushReplacement<T, dynamic>(

@@ -19,22 +19,22 @@ abstract class ServerRepository {
 }
 
 class ServerRepositoryImpl implements ServerRepository {
-  final ServerDatasource _serverDatasource;
-  final RoutingDatasource _routingDatasource;
+  final ServerDataSource _serverDataSource;
+  final RoutingDataSource _routingDataSource;
 
   ServerRepositoryImpl({
-    required ServerDatasource serverDatasource,
-    required RoutingDatasource routingDatasource,
-  }) : _serverDatasource = serverDatasource,
-       _routingDatasource = routingDatasource;
+    required ServerDataSource serverDataSource,
+    required RoutingDataSource routingDataSource,
+  }) : _serverDataSource = serverDataSource,
+       _routingDataSource = routingDataSource;
 
   @override
   Future<Server> addNewServer({required AddServerRequest request}) async {
-    final server = await _serverDatasource.addNewServer(
+    final server = await _serverDataSource.addNewServer(
       request: request,
     );
 
-    final profile = await _routingDatasource.getProfileById(
+    final profile = await _routingDataSource.getProfileById(
       id: request.routingProfileId,
     );
 
@@ -53,9 +53,10 @@ class ServerRepositoryImpl implements ServerRepository {
 
   @override
   Future<List<Server>> getAllServers() async {
-    final profiles = await _routingDatasource.getAllProfiles();
-    final servers = await _serverDatasource.getAllServers();
+    final profiles = await _routingDataSource.getAllProfiles();
+    final servers = await _serverDataSource.getAllServers();
     final profilesMap = Map.fromEntries(profiles.map((e) => MapEntry(e.id, e)));
+
     return servers
         .map(
           (e) => Server(
@@ -76,18 +77,19 @@ class ServerRepositoryImpl implements ServerRepository {
 
   @override
   Future<void> setNewServer({required int id, required AddServerRequest request}) =>
-      _serverDatasource.setNewServer(id: id, request: request);
+      _serverDataSource.setNewServer(id: id, request: request);
 
   @override
-  Future<void> setSelectedServerId({required int id}) => _serverDatasource.setSelectedServerId(id: id);
+  Future<void> setSelectedServerId({required int id}) => _serverDataSource.setSelectedServerId(id: id);
 
   @override
-  Future<void> removeServer({required int serverId}) => _serverDatasource.removeServer(serverId: serverId);
+  Future<void> removeServer({required int serverId}) => _serverDataSource.removeServer(serverId: serverId);
 
   @override
   Future<Server?> getServerById({required int id}) async {
-    final server = await _serverDatasource.getServerById(id: id);
-    final profile = await _routingDatasource.getProfileById(id: server.routingProfileId);
+    final server = await _serverDataSource.getServerById(id: id);
+    final profile = await _routingDataSource.getProfileById(id: server.routingProfileId);
+
     return Server(
       id: server.id,
       name: server.name,

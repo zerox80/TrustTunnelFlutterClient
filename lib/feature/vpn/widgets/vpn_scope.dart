@@ -27,18 +27,29 @@ class VpnScope extends StatefulWidget {
       ? context.dependOnInheritedWidgetOfExactType<_InheritedVpnScope>()
       : context.getElementForInheritedWidgetOfExactType<_InheritedVpnScope>()?.widget as _InheritedVpnScope?;
 
+  static VpnController of(BuildContext context, {bool listen = true}) =>
+      maybeOf(context, listen: listen) ?? _notFoundInheritedWidgetOfExactType();
+
   static Never _notFoundInheritedWidgetOfExactType() => throw ArgumentError(
     'Out of scope, not found inherited widget '
         'a _InheritedVpnScope of the exact type',
     'out_of_scope',
   );
-
-  static VpnController of(BuildContext context, {bool listen = true}) =>
-      maybeOf(context, listen: listen) ?? _notFoundInheritedWidgetOfExactType();
 }
 
 class _VpnScopeState extends State<VpnScope> {
   Stream<VpnState>? _vpnStream;
+
+  @override
+  Widget build(BuildContext context) => StreamBuilder<VpnState>(
+    stream: _vpnStream,
+    builder: (context, snapshot) => _InheritedVpnScope(
+      state: snapshot.data ?? VpnState.disconnected,
+      onStart: _start,
+      onStop: _stop,
+      child: widget.child,
+    ),
+  );
 
   Future<void> _start({
     required Server server,
@@ -62,20 +73,8 @@ class _VpnScopeState extends State<VpnScope> {
 
   Future<void> _stop() async {
     await widget.vpnRepository.stop();
-    await Future.delayed(Duration(milliseconds: 100));
     _vpnStream = null;
   }
-
-  @override
-  Widget build(BuildContext context) => StreamBuilder<VpnState>(
-    stream: _vpnStream,
-    builder: (context, snapshot) => _InheritedVpnScope(
-      state: snapshot.data ?? VpnState.disconnected,
-      onStart: _start,
-      onStop: _stop,
-      child: widget.child,
-    ),
-  );
 
   @override
   void dispose() {

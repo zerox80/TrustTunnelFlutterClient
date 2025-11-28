@@ -18,18 +18,19 @@ class AboutScreen extends StatelessWidget {
       body: FutureBuilder<String>(
         future: _getPackageVersion(),
         builder: (context, snapshot) => DefaultPage(
-            title: context.ln.vpnOss,
-            descriptionText: snapshot.data,
-            imagePath: AssetImages.privacy,
-            imageSize: const Size.square(248),
-            alignment: Alignment.center,
-          ),
+          title: context.ln.vpnOss,
+          descriptionText: snapshot.data,
+          imagePath: AssetImages.privacy,
+          imageSize: const Size.square(248),
+          alignment: Alignment.center,
+        ),
       ),
     ),
   );
 
   Future<String> _getPackageVersion() async {
     final PackageInfo packageInfo = await PackageInfo.fromPlatform();
+
     return 'V${packageInfo.version}';
   }
 }

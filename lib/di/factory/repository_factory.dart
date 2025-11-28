@@ -31,22 +31,22 @@ class RepositoryFactoryImpl implements RepositoryFactory {
 
   @override
   ServerRepository get serverRepository => _serverRepository ??= ServerRepositoryImpl(
-    serverDatasource: _dependencyFactory.serverDatasource,
-    routingDatasource: _dependencyFactory.routingDatasource,
+    serverDataSource: _dependencyFactory.serverDataSource,
+    routingDataSource: _dependencyFactory.routingDataSource,
   );
 
   @override
   SettingsRepository get settingsRepository => _settingsRepository ??= SettingsRepositoryImpl(
-    settingsDatasource: _dependencyFactory.settingsDatasource,
+    settingsDataSource: _dependencyFactory.settingsDataSource,
   );
 
   @override
   RoutingRepository get routingRepository => _routingRepository ??= RoutingRepositoryImpl(
-    routingDatasource: _dependencyFactory.routingDatasource,
+    routingDataSource: _dependencyFactory.routingDataSource,
   );
 
   @override
   VpnRepository get vpnRepository => _vpnRepository ??= VpnRepositoryImpl(
-    vpnDatasource: _dependencyFactory.vpnDatasource,
+    vpnDataSource: _dependencyFactory.vpnDataSource,
   );
 }

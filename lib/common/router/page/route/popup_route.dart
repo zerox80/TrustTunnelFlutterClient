@@ -6,15 +6,14 @@ import 'package:vpn/common/utils/common_utils.dart';
 import 'package:vpn/data/model/breakpoint.dart';
 
 class PopUpRoute<T> extends CustomPageRoute<T> {
-  late final WidgetBuilder _builder;
+  @override
+  final bool maintainState;
+  @override
+  final bool opaque;
   final bool _fullScreenDialog;
   final BuildContext _context;
-  late final ValueNotifier<Breakpoint> _breakpointListenable;
   final Duration? _transitionDuration;
   final Duration? _reverseTransitionDuration;
-  late bool _isFullScreen;
-  ThemeData? _lastActualTheme;
-
   PopUpRoute({
     required WidgetBuilder builder,
     required BuildContext context,
@@ -31,28 +30,13 @@ class PopUpRoute<T> extends CustomPageRoute<T> {
        super(traversalEdgeBehavior: TraversalEdgeBehavior.closedLoop) {
     _initSub();
   }
+  late final WidgetBuilder _builder;
 
-  void _initSub() {
-    _breakpointListenable = ValueNotifier(_context.breakpoint);
-    _performTransformationByBreakpoint(_breakpointListenable.value);
-    _breakpointListenable.addListener(_breakPointListener);
-  }
+  late final ValueNotifier<Breakpoint> _breakpointListenable;
 
-  void _breakPointListener() {
-    _performTransformationByBreakpoint(_breakpointListenable.value);
-    changedInternalState();
-  }
+  late bool _isFullScreen;
 
-  void _performTransformationByBreakpoint(Breakpoint breakpoint) {
-    final isMobile = breakpoint == Breakpoint.XS;
-    _isFullScreen = isMobile && _fullScreenDialog;
-  }
-
-  @override
-  final bool maintainState;
-
-  @override
-  final bool opaque;
+  ThemeData? _lastActualTheme;
 
   @override
   Color? get barrierColor => _isFullScreen ? null : _theme?.dialogTheme.barrierColor ?? Colors.black54;
@@ -77,6 +61,17 @@ class PopUpRoute<T> extends CustomPageRoute<T> {
 
   @override
   bool get popGestureInProgress => navigator?.userGestureInProgress ?? false;
+
+  Duration get _defaultTransitionDuration =>
+      _isFullScreen ? const Duration(milliseconds: 300) : const Duration(milliseconds: 200);
+
+  ThemeData? get _theme {
+    if (_context.mounted) {
+      _lastActualTheme = _context.theme;
+    }
+
+    return _lastActualTheme;
+  }
 
   @override
   bool canTransitionTo(TransitionRoute<dynamic> nextRoute) => (nextRoute is PopUpRoute && nextRoute.opaque);
@@ -109,6 +104,7 @@ class PopUpRoute<T> extends CustomPageRoute<T> {
         child: child,
       );
     }
+
     return transition;
   }
 
@@ -126,13 +122,19 @@ class PopUpRoute<T> extends CustomPageRoute<T> {
     super.dispose();
   }
 
-  Duration get _defaultTransitionDuration =>
-      _isFullScreen ? const Duration(milliseconds: 300) : const Duration(milliseconds: 200);
+  void _initSub() {
+    _breakpointListenable = ValueNotifier(_context.breakpoint);
+    _performTransformationByBreakpoint(_breakpointListenable.value);
+    _breakpointListenable.addListener(_breakPointListener);
+  }
 
-  ThemeData? get _theme {
-    if (_context.mounted) {
-      _lastActualTheme = _context.theme;
-    }
-    return _lastActualTheme;
+  void _breakPointListener() {
+    _performTransformationByBreakpoint(_breakpointListenable.value);
+    changedInternalState();
+  }
+
+  void _performTransformationByBreakpoint(Breakpoint breakpoint) {
+    final isMobile = breakpoint == Breakpoint.XS;
+    _isFullScreen = isMobile && _fullScreenDialog;
   }
 }

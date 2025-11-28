@@ -57,6 +57,30 @@ class ServerDetailsServiceImpl implements ServerDetailsService {
     return fields;
   }
 
+  @override
+  AddServerRequest toAddServerRequest({required ServerDetailsData data}) => (
+    username: data.username,
+    name: data.serverName,
+    ipAddress: data.ipAddress,
+    domain: data.domain,
+    password: data.password,
+    vpnProtocol: data.protocol,
+    dnsServers: data.dnsServers,
+    routingProfileId: data.routingProfileId,
+  );
+
+  @override
+  ServerDetailsData toServerDetailsData({required Server server}) => ServerDetailsData(
+    serverName: server.name,
+    ipAddress: server.ipAddress,
+    domain: server.domain,
+    username: server.username,
+    password: server.password,
+    protocol: server.vpnProtocol,
+    routingProfileId: server.routingProfile.id,
+    dnsServers: server.dnsServers.cast<String>(),
+  );
+
   PresentationField? _validateServerName(String serverName, Set<String> otherServerNames) {
     final fieldName = PresentationFieldName.serverName;
     if (serverName.isEmpty) {
@@ -65,6 +89,7 @@ class ServerDetailsServiceImpl implements ServerDetailsService {
     if (otherServerNames.contains(serverName)) {
       return _getAlreadyExistsField(fieldName);
     }
+
     return null;
   }
 
@@ -77,6 +102,7 @@ class ServerDetailsServiceImpl implements ServerDetailsService {
     if (!ipAddressRegexp.hasMatch(ipAddress)) {
       return _getFieldWrongValue(fieldName);
     }
+
     return null;
   }
 
@@ -90,6 +116,7 @@ class ServerDetailsServiceImpl implements ServerDetailsService {
     if (!domainRegexp.hasMatch(domain)) {
       return _getFieldWrongValue(fieldName);
     }
+
     return null;
   }
 
@@ -98,6 +125,7 @@ class ServerDetailsServiceImpl implements ServerDetailsService {
     if (username.isEmpty) {
       return _getRequiredField(fieldName);
     }
+
     return null;
   }
 
@@ -106,6 +134,7 @@ class ServerDetailsServiceImpl implements ServerDetailsService {
     if (password.isEmpty) {
       return _getRequiredField(fieldName);
     }
+
     return null;
   }
 
@@ -131,30 +160,6 @@ class ServerDetailsServiceImpl implements ServerDetailsService {
 
     return null;
   }
-
-  @override
-  AddServerRequest toAddServerRequest({required ServerDetailsData data}) => (
-    username: data.username,
-    name: data.serverName,
-    ipAddress: data.ipAddress,
-    domain: data.domain,
-    password: data.password,
-    vpnProtocol: data.protocol,
-    dnsServers: data.dnsServers,
-    routingProfileId: data.routingProfileId,
-  );
-
-  @override
-  ServerDetailsData toServerDetailsData({required Server server}) => ServerDetailsData(
-    serverName: server.name,
-    ipAddress: server.ipAddress,
-    domain: server.domain,
-    username: server.username,
-    password: server.password,
-    protocol: server.vpnProtocol,
-    routingProfileId: server.routingProfile.id,
-    dnsServers: server.dnsServers.cast<String>(),
-  );
 
   PresentationField _getRequiredField(PresentationFieldName fieldName) => PresentationField(
     code: PresentationFieldErrorCode.fieldRequired,

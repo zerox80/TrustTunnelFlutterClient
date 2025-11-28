@@ -26,8 +26,6 @@ class ServerDetailsBloc extends Bloc<ServerDetailsEvent, ServerDetailsState> {
   final RoutingRepository _routingRepository;
   final ServerDetailsService _serverDetailsService;
   final VpnRepository _vpnRepository;
-  late final ServerDetailsData _initialData;
-
   ServerDetailsBloc({
     int? serverId,
     required RoutingRepository routingRepository,
@@ -53,13 +51,19 @@ class ServerDetailsBloc extends Bloc<ServerDetailsEvent, ServerDetailsState> {
     );
   }
 
+  late final ServerDetailsData _initialData;
+
   Future<void> _fetch(
     _Fetch event,
     Emitter<ServerDetailsState> emit,
   ) async {
     try {
       final profiles = await _routingRepository.getAllProfiles();
-      emit(state.copyWith(availableRoutingProfiles: profiles, ));
+      emit(
+        state.copyWith(
+          availableRoutingProfiles: profiles,
+        ),
+      );
 
       if (state.serverId == null) {
         emit(
@@ -67,6 +71,7 @@ class ServerDetailsBloc extends Bloc<ServerDetailsEvent, ServerDetailsState> {
             loadingStatus: ServerDetailsLoadingStatus.idle,
           ),
         );
+
         return;
       }
 
@@ -90,10 +95,10 @@ class ServerDetailsBloc extends Bloc<ServerDetailsEvent, ServerDetailsState> {
     }
   }
 
-  Future<void> _dataChanged(
+  void _dataChanged(
     _DataChanged event,
     Emitter<ServerDetailsState> emit,
-  ) async => emit(
+  ) => emit(
     state.copyWith(
       data: state.data.copyWith(
         serverName: event.serverName ?? state.data.serverName,
@@ -123,6 +128,7 @@ class ServerDetailsBloc extends Bloc<ServerDetailsEvent, ServerDetailsState> {
           loadingStatus: ServerDetailsLoadingStatus.idle,
         ),
       );
+
       return;
     }
 
@@ -186,10 +192,10 @@ class ServerDetailsBloc extends Bloc<ServerDetailsEvent, ServerDetailsState> {
     }
   }
 
-  Future<void> _onException(
+  void _onException(
     Emitter<ServerDetailsState> emit,
     Object exception,
-  ) async {
+  ) {
     final PresentationError error = ErrorUtils.toPresentationError(exception: exception);
 
     if (error is PresentationFieldError) {

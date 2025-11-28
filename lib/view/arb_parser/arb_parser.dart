@@ -25,6 +25,7 @@ class ArbParser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mainStyle = plainStyle ?? DefaultTextStyle.of(context).style;
+
     return ArbParserBase(
       data: data,
       builder: (items) => _formatItems(

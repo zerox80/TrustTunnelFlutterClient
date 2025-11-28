@@ -54,6 +54,7 @@ class ServersBloc extends Bloc<ServersEvent, ServersState> {
   ) async {
     if (event.serverId == null) {
       emit(state.copyWith(selectedServerId: null));
+
       return;
     }
 
@@ -74,10 +75,10 @@ class ServersBloc extends Bloc<ServersEvent, ServersState> {
     }
   }
 
-  Future<void> _onException(
+  void _onException(
     Emitter<ServersState> emit,
     Object exception,
-  ) async {
+  ) {
     final PresentationError error = ErrorUtils.toPresentationError(exception: exception);
 
     emit(state.copyWith(action: ServerAction.presentationError(error)));

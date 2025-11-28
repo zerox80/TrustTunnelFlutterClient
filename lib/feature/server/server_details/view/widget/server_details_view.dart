@@ -19,7 +19,7 @@ class ServerDetailsView extends StatefulWidget {
 class _ServerDetailsViewState extends State<ServerDetailsView> {
   @override
   Widget build(BuildContext context) => BlocListener<ServerDetailsBloc, ServerDetailsState>(
-    listenWhen: (_, curr) => curr.action != const ServerDetailsAction.none(),
+    listenWhen: (_, current) => current.action != const ServerDetailsAction.none(),
     listener: (context, state) {
       switch (state.action) {
         case ServerDetailsPresentationError(:final error):

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vpn/common/assets/asset_icons.dart';
-import 'package:vpn/common/extensions/common_extensions.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
 import 'package:vpn/data/model/routing_profile.dart';
@@ -30,41 +29,43 @@ class RoutingCard extends StatelessWidget {
         icon: AssetIcons.moreVert,
         size: 24,
       ),
-      itemBuilder:
-          (BuildContext context) => <PopupMenuEntry<String>>[
-            PopupMenuItem<String>(
-              onTap: () => _onEditName(context),
-              child: Row(
-                children: [
-                  const CustomIcon(
-                    icon: AssetIcons.modeEdit,
-                    size: 24,
-                  ),
-                  const SizedBox(width: 12),
-                  Text(context.ln.editProfile).bodyLarge(context),
-                ],
+      itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+        PopupMenuItem<String>(
+          onTap: () => _onEditName(context),
+          child: Row(
+            children: [
+              const CustomIcon(
+                icon: AssetIcons.modeEdit,
+                size: 24,
               ),
-            ),
-            if (!RoutingProfileUtils.isDefaultRoutingProfile(profile: routingProfile))
-              PopupMenuItem<String>(
-                onTap: () => _onDeleteProfile(context),
-                child: Row(
-                  children: [
-                    CustomIcon.medium(
-                      icon: AssetIcons.delete,
-                      color: context.colors.red1,
-                    ),
-                    const SizedBox(width: 12),
-                    Text(
-                      context.ln.deleteProfile,
-                      style: context.textTheme.bodyLarge?.copyWith(
-                        color: context.colors.red1,
-                      ),
-                    ),
-                  ],
+              const SizedBox(width: 12),
+              Text(
+                context.ln.editProfile,
+                style: context.textTheme.bodyLarge,
+              ),
+            ],
+          ),
+        ),
+        if (!RoutingProfileUtils.isDefaultRoutingProfile(profile: routingProfile))
+          PopupMenuItem<String>(
+            onTap: () => _onDeleteProfile(context),
+            child: Row(
+              children: [
+                CustomIcon.medium(
+                  icon: AssetIcons.delete,
+                  color: context.colors.red1,
                 ),
-              ),
-          ],
+                const SizedBox(width: 12),
+                Text(
+                  context.ln.deleteProfile,
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    color: context.colors.red1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
     ),
   );
 
@@ -72,11 +73,10 @@ class RoutingCard extends StatelessWidget {
     final bloc = context.read<RoutingBloc>();
     showDialog(
       context: context,
-      builder:
-          (_) => RoutingEditNameDialog(
-            onSavePressed: (String value) => _editNameSubmit(bloc, value),
-            currentRoutingName: routingProfile.name,
-          ),
+      builder: (_) => RoutingEditNameDialog(
+        onSavePressed: (String value) => _editNameSubmit(bloc, value),
+        currentRoutingName: routingProfile.name,
+      ),
     );
   }
 
@@ -84,11 +84,10 @@ class RoutingCard extends StatelessWidget {
     final bloc = context.read<RoutingBloc>();
     showDialog(
       context: context,
-      builder:
-          (_) => RoutingDeleteProfileDialog(
-            onDeletePressed: () => _deleteProfileSubmit(bloc),
-            profileName: routingProfile.name,
-          ),
+      builder: (_) => RoutingDeleteProfileDialog(
+        onDeletePressed: () => _deleteProfileSubmit(bloc),
+        profileName: routingProfile.name,
+      ),
     );
   }
 

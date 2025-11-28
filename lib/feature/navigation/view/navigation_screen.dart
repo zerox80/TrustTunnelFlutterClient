@@ -52,6 +52,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
         : null,
   );
 
+  Widget getScreenByIndex(int selectedIndex) => switch (selectedIndex) {
+    0 => const ServersScreen(),
+    1 => const RoutingScreen(),
+    2 => const SettingsScreen(),
+    _ => throw Exception('Invalid index: $selectedIndex'),
+  };
+
   Widget _getContent() => NavigatorPopHandler(
     onPop: () => _navigatorKey.currentState!.pop(),
     child: Navigator(
@@ -79,11 +86,4 @@ class _NavigationScreenState extends State<NavigationScreen> {
       );
     }
   }
-
-  Widget getScreenByIndex(int selectedIndex) => switch (selectedIndex) {
-    0 => const ServersScreen(),
-    1 => const RoutingScreen(),
-    2 => const SettingsScreen(),
-    _ => throw Exception('Invalid index: $selectedIndex'),
-  };
 }

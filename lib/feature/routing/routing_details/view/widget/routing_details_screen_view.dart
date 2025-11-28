@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
-import 'package:vpn/common/extensions/enum_extensions.dart';
+import 'package:vpn/common/localization/extensions/locale_enum_extension.dart';
 import 'package:vpn/common/localization/localization.dart';
 import 'package:vpn/data/model/routing_mode.dart';
 import 'package:vpn/feature/routing/routing_details/bloc/routing_details_bloc.dart';
@@ -43,7 +43,7 @@ class RoutingDetailsScreenView extends StatelessWidget {
                 break;
             }
           },
-          buildWhen: (prev, curr) => prev.action == curr.action,
+          buildWhen: (prev, current) => prev.action == current.action,
           builder: (context, state) => Scaffold(
             appBar: CustomAppBar(
               leadingIconType: AppBarLeadingIconType.back,
@@ -60,7 +60,7 @@ class RoutingDetailsScreenView extends StatelessWidget {
                       tabs: [
                         ...RoutingMode.values.map(
                           (item) => Text(
-                            item.stringValue,
+                            item.localized(context),
                           ),
                         ),
                       ],

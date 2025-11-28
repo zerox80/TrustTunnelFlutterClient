@@ -24,12 +24,6 @@ class _OutlinedButtonSvgState extends State<CustomOutlinedButton> {
   late final _statesController = WidgetStatesController();
 
   @override
-  void dispose() {
-    _statesController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) => Theme(
     data: context.theme.copyWith(
       outlinedButtonTheme: context.theme.extension<CustomOutlinedButtonTheme>()!.iconButton,
@@ -41,13 +35,19 @@ class _OutlinedButtonSvgState extends State<CustomOutlinedButton> {
         statesController: _statesController,
         icon: ValueListenableBuilder(
           valueListenable: _statesController,
-          builder:
-              (context, value, child) => CustomIcon.medium(
-                icon: widget.icon,
-                color: context.theme.outlinedButtonTheme.style?.foregroundColor?.resolve(value) ?? context.colors.staticWhite,
-              ),
+          builder: (context, value, child) => CustomIcon.medium(
+            icon: widget.icon,
+            color:
+                context.theme.outlinedButtonTheme.style?.foregroundColor?.resolve(value) ?? context.colors.staticWhite,
+          ),
         ),
       ),
     ),
   );
+
+  @override
+  void dispose() {
+    _statesController.dispose();
+    super.dispose();
+  }
 }

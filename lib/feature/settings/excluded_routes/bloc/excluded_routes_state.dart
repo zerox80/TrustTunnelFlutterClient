@@ -2,14 +2,14 @@ part of 'excluded_routes_bloc.dart';
 
 @freezed
 abstract class ExcludedRoutesState with _$ExcludedRoutesState {
-  const ExcludedRoutesState._();
-
   const factory ExcludedRoutesState({
     @Default('') String excludedRoutes,
     @Default('') String initialExcludedRoutes,
     @Default(ExcludedRoutesAction.none) ExcludedRoutesAction action,
     @Default(ExcludedRoutesLoadingStatus.initialLoading) ExcludedRoutesLoadingStatus loadingStatus,
   }) = _ExcludedRoutesState;
+
+  const ExcludedRoutesState._();
 
   bool get isLoading => loadingStatus != ExcludedRoutesLoadingStatus.idle;
 

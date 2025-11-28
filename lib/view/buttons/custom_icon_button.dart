@@ -82,8 +82,8 @@ class _CustomIconButtonState extends State<CustomIconButton> {
 
   @override
   void initState() {
-    _isSelected = widget.selected ?? false;
     super.initState();
+    _isSelected = widget.selected ?? false;
   }
 
   @override
@@ -97,6 +97,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
   @override
   Widget build(BuildContext context) {
     final selectedIcon = _getSelectedIcon(context);
+
     return IconButton(
       onPressed: widget.onPressed != null
           ? () {
@@ -134,6 +135,7 @@ class _CustomIconButtonState extends State<CustomIconButton> {
     if (widget.selectedIcon == null) {
       return null;
     }
+
     return CustomIcon(
       icon: widget.selectedIcon!,
       size: widget.width ?? widget.height,

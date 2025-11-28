@@ -2,7 +2,7 @@ import 'package:vpn/data/model/raw/add_routing_profile_request.dart';
 import 'package:vpn/data/model/routing_mode.dart';
 import 'package:vpn/data/model/routing_profile.dart';
 
-abstract class RoutingDatasource {
+abstract class RoutingDataSource {
   Future<RoutingProfile> addNewProfile(AddRoutingProfileRequest request);
 
   Future<RoutingProfile> getProfileById({required int id});

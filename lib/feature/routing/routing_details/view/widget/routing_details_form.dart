@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
-import 'package:vpn/common/extensions/enum_extensions.dart';
+import 'package:vpn/common/localization/extensions/locale_enum_extension.dart';
 import 'package:vpn/common/localization/localization.dart';
 import 'package:vpn/data/model/routing_mode.dart';
-import 'package:vpn/feature/routing/routing_details/domain/routing_spell_check_service.dart';
 import 'package:vpn/feature/routing/routing_details/bloc/routing_details_bloc.dart';
+import 'package:vpn/feature/routing/routing_details/domain/routing_spell_check_service.dart';
 import 'package:vpn/view/inputs/custom_text_field.dart';
 
 class RoutingDetailsForm extends StatelessWidget {
@@ -15,7 +15,7 @@ class RoutingDetailsForm extends StatelessWidget {
   Widget build(BuildContext context) => Padding(
     padding: const EdgeInsets.all(16.0),
     child: BlocBuilder<RoutingDetailsBloc, RoutingDetailsState>(
-      buildWhen: (prev, curr) => prev.action == curr.action,
+      buildWhen: (prev, current) => prev.action == current.action,
       builder: (context, state) => context.isMobileBreakpoint
           ? TabBarView(
               children: [
@@ -43,7 +43,7 @@ class RoutingDetailsForm extends StatelessWidget {
     RoutingDetailsState state, {
     bool showLabel = false,
   }) => CustomTextField(
-    label: showLabel ? RoutingMode.vpn.stringValue : null,
+    label: showLabel ? RoutingMode.vpn.localized(context) : null,
     value: state.data.vpnRules.join('\n'),
     hint: context.ln.enterRulesHint,
     spellCheckService: RoutingSpellCheckService(
@@ -66,7 +66,7 @@ class RoutingDetailsForm extends StatelessWidget {
     RoutingDetailsState state, {
     bool showLabel = false,
   }) => CustomTextField(
-    label: showLabel ? RoutingMode.bypass.stringValue : null,
+    label: showLabel ? RoutingMode.bypass.localized(context) : null,
     value: state.data.bypassRules.join('\n'),
     hint: context.ln.enterRulesHint,
     minLines: 40,

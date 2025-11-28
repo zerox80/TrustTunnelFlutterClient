@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
-import 'package:vpn/common/extensions/enum_extensions.dart';
+import 'package:vpn/common/localization/extensions/locale_enum_extension.dart';
 import 'package:vpn/data/model/vpn_request.dart';
 
 class QueryLogCard extends StatelessWidget {
@@ -19,7 +19,7 @@ class QueryLogCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            _titleLine(),
+            _titleLine(context),
             style: context.textTheme.bodySmall,
           ),
           const SizedBox(height: 3),
@@ -39,7 +39,8 @@ class QueryLogCard extends StatelessWidget {
     ),
   );
 
-  String _titleLine() => '${log.zonedDateTime}    ${log.protocolName} -> ${log.decision.stringValue}';
+  String _titleLine(BuildContext context) =>
+      '${log.zonedDateTime}    ${log.protocolName} -> ${log.decision.localized(context)}';
 
   String _ipAddressLine() {
     String source = log.sourceIpAddress;

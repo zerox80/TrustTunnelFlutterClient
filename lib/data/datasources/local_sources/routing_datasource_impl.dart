@@ -1,14 +1,14 @@
 import 'package:drift/drift.dart';
+import 'package:vpn/data/database/app_database.dart' as db;
 import 'package:vpn/data/datasources/routing_datasource.dart';
 import 'package:vpn/data/model/raw/add_routing_profile_request.dart';
 import 'package:vpn/data/model/routing_mode.dart';
 import 'package:vpn/data/model/routing_profile.dart';
-import 'package:vpn/data/database/app_database.dart' as db;
 
-class RoutingLocalDatasource implements RoutingDatasource {
+class RoutingDataSourceImpl implements RoutingDataSource {
   final db.AppDatabase database;
 
-  RoutingLocalDatasource(this.database);
+  RoutingDataSourceImpl(this.database);
 
   @override
   Future<RoutingProfile> addNewProfile(AddRoutingProfileRequest request) async {
@@ -72,6 +72,7 @@ class RoutingLocalDatasource implements RoutingDatasource {
 
     return profiles.map((p) {
       final defaultMode = RoutingMode.values.firstWhere((m) => m.value == p.defaultMode);
+
       return RoutingProfile(
         id: p.id,
         name: p.name,
@@ -145,13 +146,13 @@ class RoutingLocalDatasource implements RoutingDatasource {
                 ..where((p) => p.id.isNotValue(id))
                 ..limit(1))
               .getSingle();
-              
+
       database.batch((batch) {
         batch.update(
           database.servers,
           db.ServersCompanion(
             routingProfileId: Value(replacedConfig.id),
-            selected: Value(false),
+            selected: const Value(false),
           ),
           where: (s) => s.id.isIn(servers.map((s) => s.id)),
         );

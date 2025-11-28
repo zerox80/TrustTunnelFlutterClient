@@ -24,45 +24,47 @@ abstract class RoutingRepository {
 }
 
 class RoutingRepositoryImpl implements RoutingRepository {
-  final RoutingDatasource _routingDatasource;
+  final RoutingDataSource _routingDataSource;
 
   RoutingRepositoryImpl({
-    required RoutingDatasource routingDatasource,
-  }) : _routingDatasource = routingDatasource;
+    required RoutingDataSource routingDataSource,
+  }) : _routingDataSource = routingDataSource;
 
   @override
   Future<List<RoutingProfile>> getAllProfiles() async {
-    final profiles = await _routingDatasource.getAllProfiles();
+    final profiles = await _routingDataSource.getAllProfiles();
+
     return profiles;
   }
 
   @override
   Future<RoutingProfile> addNewProfile(AddRoutingProfileRequest request) async {
-    final profile = await _routingDatasource.addNewProfile(request);
+    final profile = await _routingDataSource.addNewProfile(request);
+
     return profile;
   }
 
   @override
   Future<void> setDefaultRoutingMode({required int id, required RoutingMode mode}) =>
-      _routingDatasource.setDefaultRoutingMode(id: id, mode: mode);
+      _routingDataSource.setDefaultRoutingMode(id: id, mode: mode);
 
   @override
   Future<void> setProfileName({required int id, required String name}) =>
-      _routingDatasource.setProfileName(id: id, name: name);
+      _routingDataSource.setProfileName(id: id, name: name);
 
   @override
   Future<void> setRules({required int id, required RoutingMode mode, required String rules}) async {
-    await _routingDatasource.setRules(id: id, mode: mode, rules: rules);
+    await _routingDataSource.setRules(id: id, mode: mode, rules: rules);
   }
 
   @override
   Future<void> removeAllRules({required int id}) async {
-    await _routingDatasource.removeAllRules(id: id);
+    await _routingDataSource.removeAllRules(id: id);
   }
 
   @override
-  Future<RoutingProfile?> getProfileById({required int id}) => _routingDatasource.getProfileById(id: id);
+  Future<RoutingProfile?> getProfileById({required int id}) => _routingDataSource.getProfileById(id: id);
 
   @override
-  Future<void> deleteProfile({required int id}) => _routingDatasource.deleteProfile(id: id);
+  Future<void> deleteProfile({required int id}) => _routingDataSource.deleteProfile(id: id);
 }

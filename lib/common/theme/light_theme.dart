@@ -37,70 +37,6 @@ class LightTheme {
   static const _staticWhite = Color(0xFFF6F6F6);
   static const _staticTransparent = Colors.transparent;
 
-  ThemeData get data => ThemeData(
-    // GENERAL CONFIGURATION
-    useMaterial3: true,
-    extensions: [
-      _customColors,
-      _customFilledButtonTheme,
-      _customElevatedButtonTheme,
-      _customOutlinedButtonTheme,
-      _customTextButtonTheme,
-      _customDropdownMenuTheme,
-      _customFilledIconButtonTheme,
-      _customMissSpelledTextTheme,
-    ],
-
-    // COLOR
-    scaffoldBackgroundColor: _background1,
-    brightness: Brightness.light,
-    primaryColor: _primary1,
-    colorScheme: _colorScheme,
-    hoverColor: _staticTransparent,
-    focusColor: _staticTransparent,
-
-    // TYPOGRAPHY & ICONOGRAPHY
-    textTheme: _textTheme,
-    fontFamily: FontFamilies.roboto,
-    iconTheme: _iconThemeData,
-    textSelectionTheme: _textSelectionTheme,
-
-    // COMPONENT THEMES
-    checkboxTheme: _checkboxThemeData,
-    iconButtonTheme: _iconButtonThemeData,
-    radioTheme: _radioThemeData,
-    floatingActionButtonTheme: _floatingActionButtonThemeData,
-    switchTheme: _switchThemeData,
-    snackBarTheme: _snackBarThemeData,
-    bottomSheetTheme: _bottomSheetTheme,
-    badgeTheme: _badgeThemeData,
-    elevatedButtonTheme: _elevatedButtonTheme,
-    filledButtonTheme: _filledButtonTheme,
-    outlinedButtonTheme: _outlinedButtonThemeData,
-    textButtonTheme: _textButtonThemeData,
-    chipTheme: _chipThemeData,
-    timePickerTheme: _timePickerThemeData,
-    dialogTheme: _dialogTheme,
-    menuButtonTheme: _menuButtonThemeData,
-    menuBarTheme: _menuBarThemeData,
-    dropdownMenuTheme: _dropdownMenuThemeData,
-    menuTheme: _menuThemeData,
-    popupMenuTheme: _popupMenuThemeData,
-    datePickerTheme: _datePickerThemeData,
-    navigationBarTheme: _navigationBarThemeData,
-    appBarTheme: _appBarTheme,
-    progressIndicatorTheme: _progressIndicatorThemeData,
-    inputDecorationTheme: _inputDecorationTheme,
-    dividerTheme: _dividerThemeData,
-    navigationRailTheme: _navigationRailThemeData,
-    actionIconTheme: _actionIconThemeData,
-    listTileTheme: _listTileThemeData,
-    cardTheme: _cardTheme,
-    expansionTileTheme: _expansionTileTheme,
-    buttonTheme: _buttonTheme,
-    tabBarTheme: _tabBarTheme,
-  );
-
   late final _customColors = const CustomColors(
     primary1: _primary1,
     primary2: _primary2,
@@ -139,163 +75,12 @@ class LightTheme {
     seedColor: _primary1,
   );
 
-  final _textTheme = const TextTheme(
-    displayLarge: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 57,
-      letterSpacing: -0.25,
-      height: 1.12,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    displayMedium: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 45,
-      height: 1.15,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    displaySmall: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 36,
-      height: 1.22,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    headlineLarge: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 32,
-      height: 1.25,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    headlineMedium: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 28,
-      height: 1.28,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    headlineSmall: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 24,
-      height: 1.33,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    titleLarge: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 22,
-      height: 1.27,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    titleMedium: TextStyle(
-      fontWeight: FontWeight.w500,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 16,
-      letterSpacing: 0.15,
-      height: 1.5,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    titleSmall: TextStyle(
-      fontWeight: FontWeight.w500,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 14,
-      letterSpacing: 0.1,
-      height: 1.42,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    labelLarge: TextStyle(
-      fontWeight: FontWeight.w500,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 14,
-      letterSpacing: 0.1,
-      height: 1.42,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    labelMedium: TextStyle(
-      fontWeight: FontWeight.w500,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 12,
-      letterSpacing: 0.5,
-      height: 1.33,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    labelSmall: TextStyle(
-      fontWeight: FontWeight.w500,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 11,
-      letterSpacing: 0.5,
-      height: 1.45,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    bodyLarge: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 16,
-      letterSpacing: 0.5,
-      height: 1.5,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    bodyMedium: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 14,
-      letterSpacing: 0.25,
-      height: 1.42,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-    bodySmall: TextStyle(
-      fontWeight: FontWeight.w400,
-      fontStyle: FontStyle.normal,
-      color: _contrast1,
-      fontSize: 12,
-      letterSpacing: 0.4,
-      height: 1.33,
-      fontFamily: FontFamilies.roboto,
-      leadingDistribution: TextLeadingDistribution.even,
-    ),
-  );
-
-  final _buttonTheme = const ButtonThemeData(
-    minWidth: 70,
-    height: 40,
-  );
-
   late final _checkboxThemeData = CheckboxThemeData(
     fillColor: WidgetStateProperty.resolveWith(
       (states) {
         if (states.contains(WidgetState.selected) && !states.contains(WidgetState.disabled)) return _primary1;
         if (states.contains(WidgetState.selected) && states.contains(WidgetState.disabled)) return _primary4;
+
         return null;
       },
     ),
@@ -310,12 +95,14 @@ class LightTheme {
         if (!states.contains(WidgetState.selected) && states.contains(WidgetState.disabled)) {
           return const BorderSide(width: 2, color: _gray4);
         }
+
         return null;
       },
     ),
     overlayColor: WidgetStateProperty.resolveWith(
       (states) {
         if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _background2;
+
         return null;
       },
     ),
@@ -331,6 +118,7 @@ class LightTheme {
       foregroundColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.disabled)) return _contrast4;
+
           return _contrast1;
         },
       ),
@@ -339,12 +127,14 @@ class LightTheme {
           if (states.contains(WidgetState.disabled)) return _staticTransparent;
           if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _background2;
           if (states.contains(WidgetState.pressed)) return _background3;
+
           return null;
         },
       ),
       mouseCursor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.disabled)) return SystemMouseCursors.basic;
+
           return null;
         },
       ),
@@ -358,6 +148,7 @@ class LightTheme {
     fillColor: WidgetStateProperty.resolveWith(
       (states) {
         if (states.contains(WidgetState.disabled)) return _contrast4;
+
         return _contrast1;
       },
     ),
@@ -365,6 +156,7 @@ class LightTheme {
       (states) {
         if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _background2;
         if (states.contains(WidgetState.pressed)) return _background3;
+
         return null;
       },
     ),
@@ -392,6 +184,7 @@ class LightTheme {
         if (states.contains(WidgetState.disabled) && states.contains(WidgetState.selected)) return _primary4;
         if (states.contains(WidgetState.disabled) && !states.contains(WidgetState.selected)) return _background2;
         if (!states.contains(WidgetState.selected)) return _background2;
+
         return _primary1;
       },
     ),
@@ -401,6 +194,7 @@ class LightTheme {
         if (states.contains(WidgetState.disabled)) return _contrast4;
         if (states.contains(WidgetState.focused) || states.contains(WidgetState.focused)) return _contrast2;
         if (states.contains(WidgetState.pressed)) return _contrast3;
+
         return _contrast1;
       },
     ),
@@ -408,6 +202,7 @@ class LightTheme {
     trackOutlineWidth: WidgetStateProperty.resolveWith(
       (states) {
         if (!states.contains(WidgetState.selected)) return 2;
+
         return 0;
       },
     ),
@@ -416,8 +211,10 @@ class LightTheme {
         if (!states.contains(WidgetState.selected)) {
           if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _contrast2;
           if (states.contains(WidgetState.disabled)) return _contrast4;
+
           return _contrast1;
         }
+
         return null;
       },
     ),
@@ -462,6 +259,7 @@ class LightTheme {
         backgroundColor: WidgetStateProperty.resolveWith(
           (states) {
             if (states.contains(WidgetState.disabled)) return _red4;
+
             return _red1;
           },
         ),
@@ -469,6 +267,7 @@ class LightTheme {
           (states) {
             if (states.contains(WidgetState.pressed)) return _red3;
             if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _red2;
+
             return null;
           },
         ),
@@ -479,6 +278,7 @@ class LightTheme {
         backgroundColor: WidgetStateProperty.resolveWith(
           (states) {
             if (states.contains(WidgetState.disabled)) return _orange4;
+
             return _orange1;
           },
         ),
@@ -486,6 +286,7 @@ class LightTheme {
           (states) {
             if (states.contains(WidgetState.pressed)) return _orange3;
             if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _orange2;
+
             return null;
           },
         ),
@@ -526,6 +327,7 @@ class LightTheme {
         foregroundColor: WidgetStateProperty.resolveWith(
           (states) {
             if (states.contains(WidgetState.disabled)) return _red4;
+
             return _red1;
           },
         ),
@@ -536,6 +338,7 @@ class LightTheme {
         foregroundColor: WidgetStateProperty.resolveWith(
           (states) {
             if (states.contains(WidgetState.disabled)) return _primary4;
+
             return _primary1;
           },
         ),
@@ -546,6 +349,7 @@ class LightTheme {
         foregroundColor: WidgetStateProperty.resolveWith(
           (states) {
             if (states.contains(WidgetState.disabled)) return _primary4;
+
             return _primary1;
           },
         ),
@@ -572,6 +376,7 @@ class LightTheme {
         foregroundColor: WidgetStateProperty.resolveWith(
           (states) {
             if (states.contains(WidgetState.disabled)) return _primary4;
+
             return _primary1;
           },
         ),
@@ -592,6 +397,7 @@ class LightTheme {
       backgroundColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.disabled)) return _primary4;
+
           return _primary1;
         },
       ),
@@ -600,6 +406,7 @@ class LightTheme {
         (states) {
           if (states.contains(WidgetState.pressed)) return _primary3;
           if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _primary2;
+
           return null;
         },
       ),
@@ -621,6 +428,7 @@ class LightTheme {
       foregroundColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.disabled)) return _contrast4;
+
           return _contrast1;
         },
       ),
@@ -628,6 +436,7 @@ class LightTheme {
         (states) {
           if (states.contains(WidgetState.pressed)) return _background3;
           if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _background2;
+
           return null;
         },
       ),
@@ -640,6 +449,7 @@ class LightTheme {
       foregroundColor: WidgetStateProperty.resolveWith(
         (states) {
           if (states.contains(WidgetState.disabled)) return _contrast4;
+
           return _contrast1;
         },
       ),
@@ -647,6 +457,7 @@ class LightTheme {
         (states) {
           if (states.contains(WidgetState.pressed)) return _background3;
           if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _background2;
+
           return _staticTransparent;
         },
       ),
@@ -673,11 +484,13 @@ class LightTheme {
           if (states.contains(WidgetState.pressed)) return _blend3;
           if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _blend2;
           if (states.contains(WidgetState.disabled)) return _blend2;
+
           return _blend1;
         } else {
           if (states.contains(WidgetState.pressed)) return _background3;
           if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _background2;
           if (states.contains(WidgetState.disabled)) return _background2;
+
           return _background1;
         }
       },
@@ -725,10 +538,12 @@ class LightTheme {
     dayStyle: _textTheme.bodyLarge,
     dayBackgroundColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) return _primary1;
+
       return _staticTransparent;
     }),
     todayBackgroundColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) return _primary1;
+
       return _staticTransparent;
     }),
     dayForegroundColor: WidgetStateProperty.resolveWith((states) {
@@ -752,6 +567,7 @@ class LightTheme {
     }),
     yearBackgroundColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) return _primary1;
+
       return _staticTransparent;
     }),
     inputDecorationTheme: _inputDecorationTheme.copyWith(errorMaxLines: 2),
@@ -770,10 +586,12 @@ class LightTheme {
     ),
     dayOverlayColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) return _primary2;
+
       return _background2;
     }),
     yearOverlayColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.selected)) return _primary2;
+
       return _background2;
     }),
   );
@@ -820,6 +638,7 @@ class LightTheme {
           if (states.contains(WidgetState.disabled)) return _staticTransparent;
           if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) return _background2;
           if (states.contains(WidgetState.pressed)) return _background3;
+
           return null;
         },
       ),
@@ -979,6 +798,176 @@ class LightTheme {
     subtitleTextStyle: _textTheme.bodyMedium?.copyWith(color: _gray1),
   );
 
+  late final _customDropdownMenuTheme = CustomDropdownMenuTheme(
+    enabled: _dropdownMenuThemeData,
+    disabled: _dropdownMenuThemeData.copyWith(
+      textStyle: _dropdownMenuThemeData.textStyle?.copyWith(color: _contrast4),
+    ),
+  );
+
+  late final _tabBarTheme = TabBarThemeData(
+    labelColor: _primary1,
+    unselectedLabelColor: _contrast1,
+    indicatorColor: _primary1,
+    labelPadding: const EdgeInsets.symmetric(
+      vertical: 12,
+      horizontal: 16,
+    ),
+    labelStyle: _textTheme.titleSmall,
+  );
+
+  final _textTheme = const TextTheme(
+    displayLarge: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 57,
+      letterSpacing: -0.25,
+      height: 1.12,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    displayMedium: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 45,
+      height: 1.15,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    displaySmall: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 36,
+      height: 1.22,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    headlineLarge: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 32,
+      height: 1.25,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    headlineMedium: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 28,
+      height: 1.28,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    headlineSmall: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 24,
+      height: 1.33,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    titleLarge: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 22,
+      height: 1.27,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    titleMedium: TextStyle(
+      fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 16,
+      letterSpacing: 0.15,
+      height: 1.5,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    titleSmall: TextStyle(
+      fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 14,
+      letterSpacing: 0.1,
+      height: 1.42,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    labelLarge: TextStyle(
+      fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 14,
+      letterSpacing: 0.1,
+      height: 1.42,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    labelMedium: TextStyle(
+      fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 12,
+      letterSpacing: 0.5,
+      height: 1.33,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    labelSmall: TextStyle(
+      fontWeight: FontWeight.w500,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 11,
+      letterSpacing: 0.5,
+      height: 1.45,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    bodyLarge: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 16,
+      letterSpacing: 0.5,
+      height: 1.5,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    bodyMedium: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 14,
+      letterSpacing: 0.25,
+      height: 1.42,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+    bodySmall: TextStyle(
+      fontWeight: FontWeight.w400,
+      fontStyle: FontStyle.normal,
+      color: _contrast1,
+      fontSize: 12,
+      letterSpacing: 0.4,
+      height: 1.33,
+      fontFamily: FontFamilies.roboto,
+      leadingDistribution: TextLeadingDistribution.even,
+    ),
+  );
+
+  final _buttonTheme = const ButtonThemeData(
+    minWidth: 70,
+    height: 40,
+  );
+
   final _cardTheme = CardThemeData(
     color: _background2,
     elevation: 0,
@@ -987,13 +976,6 @@ class LightTheme {
       borderRadius: BorderRadius.circular(12.0),
     ),
     surfaceTintColor: _background1,
-  );
-
-  late final _customDropdownMenuTheme = CustomDropdownMenuTheme(
-    enabled: _dropdownMenuThemeData,
-    disabled: _dropdownMenuThemeData.copyWith(
-      textStyle: _dropdownMenuThemeData.textStyle?.copyWith(color: _contrast4),
-    ),
   );
 
   final _expansionTileTheme = ExpansionTileThemeData(
@@ -1027,6 +1009,7 @@ class LightTheme {
             if (states.contains(WidgetState.selected)) {
               return _primary1;
             }
+
             return _gray1;
           },
         ),
@@ -1039,6 +1022,7 @@ class LightTheme {
             if (states.contains(WidgetState.selected)) {
               return _primary4;
             }
+
             return _gray1;
           },
         ),
@@ -1055,14 +1039,67 @@ class LightTheme {
     ),
   );
 
-  late final _tabBarTheme = TabBarThemeData(
-    labelColor: _primary1,
-    unselectedLabelColor: _contrast1,
-    indicatorColor: _primary1,
-    labelPadding: const EdgeInsets.symmetric(
-      vertical: 12,
-      horizontal: 16,
-    ),
-    labelStyle: _textTheme.titleSmall,
+  ThemeData get data => ThemeData(
+    // GENERAL CONFIGURATION
+    useMaterial3: true,
+    extensions: [
+      _customColors,
+      _customFilledButtonTheme,
+      _customElevatedButtonTheme,
+      _customOutlinedButtonTheme,
+      _customTextButtonTheme,
+      _customDropdownMenuTheme,
+      _customFilledIconButtonTheme,
+      _customMissSpelledTextTheme,
+    ],
+
+    // COLOR
+    scaffoldBackgroundColor: _background1,
+    brightness: Brightness.light,
+    primaryColor: _primary1,
+    colorScheme: _colorScheme,
+    hoverColor: _staticTransparent,
+    focusColor: _staticTransparent,
+
+    // TYPOGRAPHY & ICONOGRAPHY
+    textTheme: _textTheme,
+    fontFamily: FontFamilies.roboto,
+    iconTheme: _iconThemeData,
+    textSelectionTheme: _textSelectionTheme,
+
+    // COMPONENT THEMES
+    checkboxTheme: _checkboxThemeData,
+    iconButtonTheme: _iconButtonThemeData,
+    radioTheme: _radioThemeData,
+    floatingActionButtonTheme: _floatingActionButtonThemeData,
+    switchTheme: _switchThemeData,
+    snackBarTheme: _snackBarThemeData,
+    bottomSheetTheme: _bottomSheetTheme,
+    badgeTheme: _badgeThemeData,
+    elevatedButtonTheme: _elevatedButtonTheme,
+    filledButtonTheme: _filledButtonTheme,
+    outlinedButtonTheme: _outlinedButtonThemeData,
+    textButtonTheme: _textButtonThemeData,
+    chipTheme: _chipThemeData,
+    timePickerTheme: _timePickerThemeData,
+    dialogTheme: _dialogTheme,
+    menuButtonTheme: _menuButtonThemeData,
+    menuBarTheme: _menuBarThemeData,
+    dropdownMenuTheme: _dropdownMenuThemeData,
+    menuTheme: _menuThemeData,
+    popupMenuTheme: _popupMenuThemeData,
+    datePickerTheme: _datePickerThemeData,
+    navigationBarTheme: _navigationBarThemeData,
+    appBarTheme: _appBarTheme,
+    progressIndicatorTheme: _progressIndicatorThemeData,
+    inputDecorationTheme: _inputDecorationTheme,
+    dividerTheme: _dividerThemeData,
+    navigationRailTheme: _navigationRailThemeData,
+    actionIconTheme: _actionIconThemeData,
+    listTileTheme: _listTileThemeData,
+    cardTheme: _cardTheme,
+    expansionTileTheme: _expansionTileTheme,
+    buttonTheme: _buttonTheme,
+    tabBarTheme: _tabBarTheme,
   );
 }

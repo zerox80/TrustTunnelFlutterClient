@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vpn/common/error/model/enum/presentation_field_name.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
-import 'package:vpn/common/extensions/enum_extensions.dart';
+import 'package:vpn/common/localization/extensions/locale_enum_extension.dart';
 import 'package:vpn/common/localization/localization.dart';
 import 'package:vpn/common/utils/validation_utils.dart';
 import 'package:vpn/data/model/routing_profile.dart';
@@ -22,8 +22,9 @@ class _ServerDetailsFormState extends State<ServerDetailsForm> {
   @override
   Widget build(BuildContext context) {
     const separator32 = SizedBox(height: 32);
+
     return BlocBuilder<ServerDetailsBloc, ServerDetailsState>(
-      buildWhen: (prev, curr) => prev.action == curr.action,
+      buildWhen: (prev, current) => prev.action == current.action,
       builder: (context, state) => ListView(
         physics: const NeverScrollableScrollPhysics(),
         padding: const EdgeInsets.all(16),
@@ -107,7 +108,7 @@ class _ServerDetailsFormState extends State<ServerDetailsForm> {
           CustomDropdownMenu<VpnProtocol>.expanded(
             value: state.data.protocol,
             values: VpnProtocol.values,
-            toText: (value) => value.stringValue,
+            toText: (value) => value.localized(context),
             labelText: context.ln.protocol,
             onChanged: (protocol) => _onDataChanged(
               context,

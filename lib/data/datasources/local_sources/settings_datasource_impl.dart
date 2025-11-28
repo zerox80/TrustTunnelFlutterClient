@@ -4,13 +4,14 @@ import 'package:vpn/data/datasources/settings_datasource.dart';
 import 'package:vpn/data/model/routing_mode.dart';
 import 'package:vpn/data/model/vpn_request.dart';
 
-class SettingsLocalDatasource implements SettingsDatasource {
+class SettingsDataSourceImpl implements SettingsDataSource {
   final db.AppDatabase database;
 
-  SettingsLocalDatasource({required this.database});
+  SettingsDataSourceImpl({required this.database});
   @override
   Future<List<VpnRequest>> getAllRequests() async {
     final unparsedResult = await database.vpnRequests.select().get();
+
     return unparsedResult
         .map(
           (e) => VpnRequest(
@@ -28,6 +29,7 @@ class SettingsLocalDatasource implements SettingsDatasource {
   @override
   Future<String> getExcludedRoutes() async {
     final unparsedResult = await database.excludedRoutes.select().get();
+
     return unparsedResult.map((e) => e.value).join('\n');
   }
 

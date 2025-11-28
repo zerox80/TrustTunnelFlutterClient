@@ -346,6 +346,7 @@ class CustomDropdownMenuTheme extends ThemeExtension<CustomDropdownMenuTheme> {
     if (other is! CustomDropdownMenuTheme) {
       return this;
     }
+
     return CustomDropdownMenuTheme(
       enabled: DropdownMenuThemeData.lerp(enabled, other.enabled, t),
       disabled: DropdownMenuThemeData.lerp(disabled, other.disabled, t),
@@ -394,8 +395,6 @@ class CustomMissSpelledTextTheme extends ThemeExtension<CustomMissSpelledTextThe
     required this.missSpelledStyle,
   });
 
-  TextStyle apply(TextStyle style) => style.merge(missSpelledStyle);
-
   @override
   ThemeExtension<CustomMissSpelledTextTheme> copyWith({TextStyle? missSpelledStyle}) => CustomMissSpelledTextTheme(
     missSpelledStyle: missSpelledStyle ?? this.missSpelledStyle,
@@ -414,6 +413,8 @@ class CustomMissSpelledTextTheme extends ThemeExtension<CustomMissSpelledTextThe
       missSpelledStyle: TextStyle.lerp(missSpelledStyle, other.missSpelledStyle, t)!,
     );
   }
+
+  TextStyle apply(TextStyle style) => style.merge(missSpelledStyle);
 }
 
 class CustomDialogTheme extends ThemeExtension<CustomDialogTheme> {
@@ -442,6 +443,7 @@ class CustomDialogTheme extends ThemeExtension<CustomDialogTheme> {
     if (other is! CustomDialogTheme) {
       return this;
     }
+
     return CustomDialogTheme(
       widthS: lerpDouble(widthS, other.widthS, t)!,
       widthL: lerpDouble(widthL, other.widthL, t)!,

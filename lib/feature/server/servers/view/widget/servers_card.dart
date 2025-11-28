@@ -47,6 +47,7 @@ class _ServersCardState extends State<ServersCard> {
       buildWhen: (previous, current) => previous.selectedServerId != current.selectedServerId,
       builder: (context, state) {
         final vpnManagerState = state.selectedServerId == widget.server.id ? _vpnStatus : VpnState.disconnected;
+
         return ServersCardConnectionButton(
           vpnManagerState: vpnManagerState,
           onPressed: () {
@@ -69,8 +70,9 @@ class _ServersCardState extends State<ServersCard> {
       serverId: serverId,
     ),
   );
-  Future<void> _disconnectFromVpn(BuildContext context) async {
+  Future<void> _disconnectFromVpn(BuildContext context) {
     final controller = VpnScope.of(context);
+
     return controller.stop();
   }
 

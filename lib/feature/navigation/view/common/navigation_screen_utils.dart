@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:vpn/common/assets/asset_icons.dart';
-import 'package:vpn/common/extensions/common_extensions.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
 import 'package:vpn/view/custom_icon.dart';
@@ -23,34 +22,33 @@ abstract class NavigationScreenUtils {
 
   static List<NavigationRailDestination> getNavigationRailDestinations(
     BuildContext context,
-  ) =>
-      getDestinations(context)
-          .map(
-            (e) => NavigationRailDestination(
-              icon: CustomIcon.medium(
-                icon: e['icon'] as IconData,
-                color: context.colors.contrast1,
-              ),
-              label: Text(
-                e['label'].toString(),
-                textAlign: TextAlign.center,
-              ).labelMedium(context),
-            ),
-          )
-          .toList();
+  ) => getDestinations(context)
+      .map(
+        (e) => NavigationRailDestination(
+          icon: CustomIcon.medium(
+            icon: e['icon'] as IconData,
+            color: context.colors.contrast1,
+          ),
+          label: Text(
+            e['label'].toString(),
+            textAlign: TextAlign.center,
+            style: context.textTheme.labelMedium,
+          ),
+        ),
+      )
+      .toList();
 
   static List<NavigationDestination> getBottomNavigationDestinations(
     BuildContext context,
-  ) =>
-      getDestinations(context)
-          .map(
-            (e) => NavigationDestination(
-              icon: CustomIcon.medium(
-                icon: e['icon'] as IconData,
-                color: context.colors.contrast1,
-              ),
-              label: e['label'].toString(),
-            ),
-          )
-          .toList();
+  ) => getDestinations(context)
+      .map(
+        (e) => NavigationDestination(
+          icon: CustomIcon.medium(
+            icon: e['icon'] as IconData,
+            color: context.colors.contrast1,
+          ),
+          label: e['label'].toString(),
+        ),
+      )
+      .toList();
 }
