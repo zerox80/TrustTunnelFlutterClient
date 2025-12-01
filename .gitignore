@@ -47,6 +47,7 @@ app.*.map.json
 # Android related
 .gradle/
 android/app/.cxx
+android/trusttunnel.keystore
 
 # Android Studio will place build artifacts here
 /android/app/debug

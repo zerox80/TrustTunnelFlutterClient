@@ -2,8 +2,8 @@
 version: 2
 
 plan:
-  name: TrustTunnel — Testing • iOS
-  key: IOSTESTING
+  name: TrustTunnel — testing
+  key: TESTING
   project-key: TT
 
 stages:
@@ -13,6 +13,7 @@ stages:
       jobs:
         - Process code checks
         - Build IPA
+        - Build release APK
 
 notifications: []
 
@@ -25,7 +26,7 @@ branches:
     after-inactive-days: 30
   integration:
     push-on-success: true
-    merge-from: iOS • TrustTunnel — testing
+    merge-from: TrustTunnel — testing
   link-to-jira: true
 
 branch-overrides:
@@ -52,7 +53,7 @@ Build IPA:
         force-clean-build: true
     - script: bamboo-specs/scripts/setup_ssh.sh
     - script: bamboo-specs/scripts/print_all_required_info.sh
-    - script: bamboo-specs/scripts/configure_before_build.sh "nightly" "$PWD"
+    - script: bamboo-specs/scripts/configure_before_ios_build.sh "nightly" "$PWD"
     - script: bamboo-specs/scripts/build_ipa.sh "adhoc" "false"
   final-tasks:
     - script: find . -mindepth 1 \( -path "./ios/build/TrustTunnel.ipa" \) -o -delete; exit 0
@@ -60,6 +61,28 @@ Build IPA:
     - name: TrustTunnel.ipa
       location: ios/build
       pattern: 'TrustTunnel.ipa'
+      shared: true
+      required: true
+  requirements:
+    - ephemeral
+    - image: registry.int.agrd.dev/macos/tahoe-build-agent-xcode26.1.1:latest
+
+Build release APK:
+  key: BUILDRELEASEAPK
+  tasks:
+    - !include task-clean-all.yaml
+    - checkout:
+        force-clean-build: true
+    - script:
+        scripts:
+          - bamboo-specs/scripts/configure_before_android_build.sh "${PWD}/android"
+          - bamboo-specs/scripts/build_android.sh apk
+  final-tasks:
+    - script: find . -mindepth 1 \( -path "./build/app/outputs/flutter-apk/app-release.apk" \) -o -delete; exit 0
+  artifacts:
+    - name: app-release.apk
+      location: build/app/outputs/flutter-apk/
+      pattern: 'app-release.apk'
       shared: true
       required: true
   requirements:

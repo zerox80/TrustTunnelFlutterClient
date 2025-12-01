@@ -2,7 +2,7 @@
 version: 2
 deployment:
   name: iOS • TrustTunnel • Beta
-  source-plan: TT-IOSBUILDINGTODEPLOY
+  source-plan: TT-BUILDINGTODEPLOY
 
 release-naming:
   next-version-name: ${bamboo.data.version_title} (${bamboo.data.version} [${bamboo.data.build_number}])
