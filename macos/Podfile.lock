@@ -30,7 +30,7 @@ PODS:
     - sqlite3/perf-threadsafe
     - sqlite3/rtree
     - sqlite3/session
-  - TrustTunnelClient (0.99.37)
+  - TrustTunnelClient (0.99.47)
   - url_launcher_macos (0.0.1):
     - FlutterMacOS
   - vpn_plugin (0.0.1):
@@ -72,7 +72,7 @@ SPEC CHECKSUMS:
   path_provider_foundation: 080d55be775b7414fd5a5ef3ac137b97b097e564
   sqlite3: 73513155ec6979715d3904ef53a8d68892d4032b
   sqlite3_flutter_libs: 83f8e9f5b6554077f1d93119fe20ebaa5f3a9ef1
-  TrustTunnelClient: 284475b3caff476c3ea132a1740ba70590593369
+  TrustTunnelClient: 1373efad99b62957d958cd46230e6842db998157
   url_launcher_macos: 0fba8ddabfc33ce0a9afe7c5fef5aab3d8d2d673
   vpn_plugin: ccaa85a537811ebf689b91d10f8fc34db1adc471
 
