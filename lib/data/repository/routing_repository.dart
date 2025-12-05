@@ -14,7 +14,7 @@ abstract class RoutingRepository {
 
   Future<void> setProfileName({required int id, required String name});
 
-  Future<void> setRules({required int id, required RoutingMode mode, required String rules});
+  Future<void> setRules({required int id, required RoutingMode mode, required List<String> rules});
 
   Future<void> removeAllRules({required int id});
 
@@ -53,7 +53,7 @@ class RoutingRepositoryImpl implements RoutingRepository {
       _routingDataSource.setProfileName(id: id, name: name);
 
   @override
-  Future<void> setRules({required int id, required RoutingMode mode, required String rules}) async {
+  Future<void> setRules({required int id, required RoutingMode mode, required List<String> rules}) async {
     await _routingDataSource.setRules(id: id, mode: mode, rules: rules);
   }
 

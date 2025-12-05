@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -96,7 +95,8 @@ class RoutingDetailsBloc extends Bloc<RoutingDetailsEvent, RoutingDetailsState> 
           ),
         );
         routingId = newRoute.id;
-        await _updateProfile(state.data, newRoute.id);
+      } else {
+        await _updateProfile(state.data, routingId);
       }
 
       emit(state.copyWith(action: const RoutingDetailsAction.saved()));
@@ -207,13 +207,13 @@ class RoutingDetailsBloc extends Bloc<RoutingDetailsEvent, RoutingDetailsState> 
     _routingRepository.setRules(
       id: routingId,
       mode: RoutingMode.bypass,
-      rules: data.bypassRules.join(Platform.lineTerminator),
+      rules: data.bypassRules,
     ),
 
     _routingRepository.setRules(
       id: routingId,
       mode: RoutingMode.vpn,
-      rules: data.vpnRules.join(Platform.lineTerminator),
+      rules: data.vpnRules,
     ),
   ]);
 }

@@ -56,8 +56,8 @@ class RoutingDataSourceImpl implements RoutingDataSource {
     final profiles = await database.select(database.routingProfiles).get();
     if (profiles.isEmpty) return [];
 
-    final profileIds = profiles.map((p) => p.id).toList();
-    final rules = await (database.select(database.profileRules)..where((r) => r.profileId.isIn(profileIds))).get();
+    final profileIds = profiles.map((p) => p.id).toSet();
+    final rules = await _loadRulesOfProfiles(profileIds);
 
     final bypassByProfile = <int, List<String>>{};
     final vpnByProfile = <int, List<String>>{};
@@ -102,12 +102,21 @@ class RoutingDataSourceImpl implements RoutingDataSource {
   }
 
   @override
-  Future<void> setRules({required int id, required RoutingMode mode, required String rules}) async {
-    final updateStatement = database.update(
-      database.profileRules,
-    );
-    updateStatement.where((p) => p.profileId.equals(id) & p.mode.equals(mode.value));
-    await updateStatement.write(db.ProfileRulesCompanion(data: Value(rules)));
+  Future<void> setRules({required int id, required RoutingMode mode, required List<String> rules}) async {
+    await database.profileRules.deleteWhere((p) => p.profileId.equals(id) & p.mode.equals(mode.value));
+
+    return database.batch((batch) {
+      batch.insertAllOnConflictUpdate(
+        database.profileRules,
+        rules.map(
+          (data) => db.ProfileRulesCompanion.insert(
+            profileId: id,
+            mode: mode.value,
+            data: data,
+          ),
+        ),
+      );
+    });
   }
 
   @override
@@ -124,7 +133,8 @@ class RoutingDataSourceImpl implements RoutingDataSource {
     final profile = await (database.routingProfiles.select()..where((p) => p.id.equals(id))).getSingleOrNull();
     if (profile == null) throw Exception('Profile not found');
 
-    final rules = await (database.select(database.profileRules)..where((r) => r.profileId.equals(id))).get();
+    final rules = await _loadRulesOfProfiles({id});
+
     final bypassRules = rules.where((r) => r.mode == RoutingMode.bypass.value).map((r) => r.data).toList();
     final vpnRules = rules.where((r) => r.mode == RoutingMode.vpn.value).map((r) => r.data).toList();
 
@@ -164,5 +174,19 @@ class RoutingDataSourceImpl implements RoutingDataSource {
     );
     deleteStatement.where((p) => p.id.equals(id));
     await deleteStatement.go();
+  }
+
+  Future<List<db.ProfileRule>> _loadRulesOfProfiles(Set<int> profileIds) async {
+    final select = database.select(database.profileRules)
+      ..where((r) => r.profileId.isIn(profileIds))
+      ..orderBy(
+        [
+          (r) => OrderingTerm.asc(
+            r.rowId,
+          ),
+        ],
+      );
+
+    return select.get();
   }
 }

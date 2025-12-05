@@ -13,7 +13,7 @@ abstract class RoutingDataSource {
 
   Future<void> setProfileName({required int id, required String name});
 
-  Future<void> setRules({required int id, required RoutingMode mode, required String rules});
+  Future<void> setRules({required int id, required RoutingMode mode, required List<String> rules});
 
   Future<void> removeAllRules({required int id});
 
