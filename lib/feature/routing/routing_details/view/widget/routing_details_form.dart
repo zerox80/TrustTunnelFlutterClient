@@ -57,7 +57,7 @@ class RoutingDetailsForm extends StatelessWidget {
     showClearButton: false,
     onChanged: (vpnRules) => _onDataChanged(
       context,
-      vpnRules: vpnRules.trim().split('\n'),
+      vpnRules: vpnRules.split('\n').map((r) => r.trim()).where((r) => r.isNotEmpty).toList(),
     ),
   );
 
@@ -80,7 +80,7 @@ class RoutingDetailsForm extends StatelessWidget {
     showClearButton: false,
     onChanged: (bypassRules) => _onDataChanged(
       context,
-      bypassRules: bypassRules.trim().split('\n'),
+      bypassRules: bypassRules.split('\n').map((r) => r.trim()).where((r) => r.isNotEmpty).toList(),
     ),
   );
 

@@ -14,9 +14,7 @@ sealed class RoutingDetailsState with _$RoutingDetailsState {
 
   const RoutingDetailsState._();
 
-  DeepCollectionEquality get _collectionEquality => const DeepCollectionEquality();
-
-  bool get hasChanges => !_collectionEquality.equals(data, initialData);
+  bool get hasChanges => data != initialData;
 
   bool get isEditing => routingId != null;
 }
