@@ -45,6 +45,7 @@ class RoutingDetailsForm extends StatelessWidget {
   }) => CustomTextField(
     label: showLabel ? RoutingMode.vpn.localized(context) : null,
     value: state.data.vpnRules.join('\n'),
+    autofocus: true,
     hint: context.ln.enterRulesHint,
     spellCheckService: RoutingSpellCheckService(
       onChecked: (spellValid) => _onDataChanged(
@@ -68,6 +69,7 @@ class RoutingDetailsForm extends StatelessWidget {
   }) => CustomTextField(
     label: showLabel ? RoutingMode.bypass.localized(context) : null,
     value: state.data.bypassRules.join('\n'),
+    autofocus: true,
     hint: context.ln.enterRulesHint,
     minLines: 40,
     maxLines: 40,
