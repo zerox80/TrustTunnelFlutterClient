@@ -16,7 +16,6 @@ class InitializationHelperIo extends InitializationHelper {
   Future<InitializationResult> init() async {
     WidgetsFlutterBinding.ensureInitialized();
     await _updateDeviceOrientation();
-    PlatformDispatcher.instance.onMetricsChanged = () => _updateDeviceOrientation();
 
     final dependenciesFactory = DependencyFactoryImpl();
 
