@@ -35,7 +35,10 @@ class _RoutingDetailsChangeRoutingDialogState extends State<RoutingDetailsChange
         const SizedBox(height: 40),
         CustomDropdownMenu<RoutingMode>.expanded(
           value: _selectedRoutingMode,
-          values: RoutingMode.values,
+          values: [
+            RoutingMode.vpn,
+            RoutingMode.bypass,
+          ],
           toText: (value) => value.localized(context),
           labelText: context.ln.defaultProfile,
           onChanged: _onRoutingChanged,

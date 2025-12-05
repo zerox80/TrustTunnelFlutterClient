@@ -88,7 +88,7 @@ class AppDatabase extends _$AppDatabase {
         await into(routingProfiles).insert(
           RoutingProfilesCompanion.insert(
             name: 'Default profile',
-            defaultMode: 1,
+            defaultMode: 2,
             id: const Value(RoutingProfileUtils.defaultRoutingProfileId),
           ),
         );
