@@ -8,9 +8,6 @@
 !include 'plan-building-to-deploy.yaml'
 
 ---
-!include 'deployment-prenightly.yaml'
-
----
 !include 'deployment-nightly.yaml'
 
 ---
@@ -18,9 +15,6 @@
 
 ---
 !include 'deployment-release.yaml'
-
----
-!include 'deployment-prenightly-permissions.yaml'
 
 ---
 !include 'deployment-nightly-permissions.yaml'
