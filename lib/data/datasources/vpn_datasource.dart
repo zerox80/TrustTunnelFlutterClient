@@ -14,4 +14,6 @@ abstract class VpnDataSource {
   });
 
   Future<void> stop();
+
+  Future<VpnState> requestState();
 }

@@ -82,4 +82,11 @@ class VpnDataSourceImpl implements VpnDataSource {
 
   @override
   Future<void> stop() => _platformApi.stop();
+
+  @override
+  Future<VpnState> requestState() async {
+    final state = await _platformApi.getCurrentState();
+
+    return VpnStateFromApi.parse(state);
+  }
 }

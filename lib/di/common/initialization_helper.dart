@@ -27,10 +27,13 @@ class InitializationHelperIo extends InitializationHelper {
       repositoryFactory: repositoryFactory,
     );
 
+    final initialVpnState = await repositoryFactory.vpnRepository.requestState();
+
     return InitializationResult(
       dependenciesFactory: dependenciesFactory,
       blocFactory: blocFactory,
       repositoryFactory: repositoryFactory,
+      initialVpnState: initialVpnState,
     );
   }
 

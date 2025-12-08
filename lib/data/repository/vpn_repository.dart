@@ -11,6 +11,8 @@ abstract class VpnRepository {
 
   Future<Stream<VpnLog>> listenToLogs();
 
+  Future<VpnState> requestState();
+
   Future<void> stop();
 }
 
@@ -39,4 +41,7 @@ class VpnRepositoryImpl implements VpnRepository {
 
   @override
   Future<Stream<VpnLog>> listenToLogs() async => _vpnDataSource.vpnLogs;
+  
+  @override
+  Future<VpnState> requestState() => _vpnDataSource.requestState();
 }

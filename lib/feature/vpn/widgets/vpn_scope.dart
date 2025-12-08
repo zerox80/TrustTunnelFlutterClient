@@ -15,11 +15,13 @@ typedef OnStartVpnCallback = Future<void> Function({required Server server, requ
 
 class VpnScope extends StatefulWidget {
   final VpnRepository vpnRepository;
+  final VpnState initialState;
   final Widget child;
 
   const VpnScope({
     required this.child,
     required this.vpnRepository,
+    this.initialState = VpnState.disconnected,
     super.key,
   });
 
@@ -61,7 +63,7 @@ class _VpnScopeState extends State<VpnScope> {
   @override
   void initState() {
     super.initState();
-    _stateNotifier = ValueNotifier(VpnState.disconnected);
+    _stateNotifier = ValueNotifier(widget.initialState);
     _logsNotifier = ValueNotifier(<VpnLog>[]);
     widget.vpnRepository.listenToLogs().then((stream) => _logStreamSub = stream.listen(_onLogCollected));
   }

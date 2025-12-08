@@ -12,6 +12,7 @@ import 'package:vpn/data/datasources/vpn_datasource.dart';
 import 'package:vpn_plugin/vpn_plugin.dart';
 
 abstract class DependencyFactory {
+
   ThemeData get lightThemeData;
 
   VpnPlugin get vpnPlugin;

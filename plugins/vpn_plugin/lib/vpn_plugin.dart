@@ -18,6 +18,8 @@ abstract class VpnPlugin {
 
   Future<void> stop();
 
+  Future<VpnManagerState> getCurrentState();
+
   abstract final Stream<VpnManagerState> states;
 
   abstract final Stream<QueryLogRow> queryLog;
@@ -34,7 +36,8 @@ class VpnPluginImpl implements VpnPlugin {
   final IVpnManager _api;
   final EventChannel _vpnChannel;
   final EventChannel _queryLogChannel;
-
+  
+  @override
   Future<VpnManagerState> getCurrentState() => _api.getCurrentState();
 
   final _logEncoder = QueryLogEncoder();
