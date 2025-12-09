@@ -86,11 +86,12 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   late final TextEditingController _controller;
   late final FocusScopeNode _focusNode;
+  late final ScrollController _scrollController;
 
   @override
   void initState() {
     super.initState();
-
+    _scrollController = ScrollController();
     _controller = widget.controller ?? TextEditingController();
     _controller.text = widget.value ?? '';
     _focusNode = FocusScopeNode(traversalEdgeBehavior: TraversalEdgeBehavior.parentScope);
@@ -120,12 +121,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return FocusScope(
       node: _focusNode,
       skipTraversal: !widget.enabled,
+      onFocusChange: _scrollToStartOnFocusLost,
       child: ListenableBuilder(
         listenable: _focusNode,
         builder: (context, child) => TextFormField(
           controller: _controller,
           enabled: widget.enabled,
           readOnly: widget.readOnly,
+          scrollController: _scrollController,
           cursorWidth: 1,
           cursorHeight: context.textTheme.bodyLarge?.fontSize,
           textAlignVertical: TextAlignVertical.center,
@@ -136,7 +139,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           maxLines: widget.maxLines,
           maxLength: _focusNode.hasFocus ? widget.maxLength : null,
           keyboardType: widget.keyboardType,
-          autofocus: widget.autofocus,
+          autofocus: true,
           validator: widget.validator,
           spellCheckConfiguration: spellCheckConfig,
           decoration: InputDecoration(
@@ -185,13 +188,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
   bool showSuffix(bool hasFocus) =>
       (hasFocus && widget.showClearButton && _controller.text.isNotEmpty) || widget.error != null;
 
+  void _scrollToStartOnFocusLost(bool hasFocus) {
+    if (!hasFocus) {
+      _scrollController.jumpTo(0);
+    }
+  }
+
   @override
   void dispose() {
     // Dispose of only the controller created internally
     if (widget.controller == null) {
       _controller.dispose();
     }
-
+    _scrollController.dispose();
     _focusNode.dispose();
 
     super.dispose();
