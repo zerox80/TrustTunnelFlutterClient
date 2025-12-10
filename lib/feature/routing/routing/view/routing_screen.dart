@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vpn/common/extensions/context_extensions.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vpn/feature/routing/routing/bloc/routing_bloc.dart';
 import 'package:vpn/feature/routing/routing/view/widget/routing_screen_view.dart';
 
@@ -14,7 +14,7 @@ class _RoutingScreenState extends State<RoutingScreen> {
   @override
   void initState() {
     super.initState();
-    context.blocFactory.routingBloc().add(
+    context.read<RoutingBloc>().add(
       const RoutingEvent.fetch(),
     );
   }

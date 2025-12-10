@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'package:collection/collection.dart';
 import 'package:vpn/common/extensions/model_extensions.dart';
 import 'package:vpn/common/utils/upstream_protocol_encoder.dart';
 import 'package:vpn/common/utils/validation_utils.dart';
@@ -58,8 +57,6 @@ class VpnDataSourceImpl implements VpnDataSource {
     required RoutingProfile routingProfile,
     required List<String> excludedRoutes,
   }) {
-    final routingProfile = server.routingProfile;
-
     final exclusions = _getExclusionsByMode(routingProfile);
 
     final endPoint = Endpoint(
@@ -72,7 +69,6 @@ class VpnDataSourceImpl implements VpnDataSource {
       ],
       exclusions: exclusions,
       dnsUpStreams: server.dnsServers,
-
       upStreamProtocol: UpStreamProtocolEncoder().convert(
         server.vpnProtocol,
       ),
@@ -112,13 +108,29 @@ class VpnDataSourceImpl implements VpnDataSource {
       case RoutingMode.vpn:
         exclusions = profile.bypassRules;
     }
-
-    final parsedExclusions = exclusions.map(ValidationUtils.tryParseDomain).nonNulls.toList();
     final wildCard = '*.';
 
+    final Set<String> parsedDomains = {};
+    final Set<String> parsedAddresses = {};
+
+    for (final exclusion in exclusions) {
+      final domainValue = ValidationUtils.tryParseDomain(exclusion);
+
+      if (domainValue == null) {
+        parsedAddresses.add(exclusion);
+        continue;
+      }
+
+      parsedDomains.add(domainValue);
+      bool hasWildCard = domainValue.startsWith(wildCard);
+      if (!hasWildCard) {
+        parsedDomains.add('$wildCard$domainValue');
+      }
+    }
+
     return {
-      ...parsedExclusions,
-      ...parsedExclusions.whereNot((e) => e.startsWith(wildCard)).map((e) => '$wildCard$e'),
+      ...parsedAddresses,
+      ...parsedDomains,
     }.toList();
   }
 }

@@ -1,4 +1,5 @@
 import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vpn/common/error/error_utils.dart';
@@ -172,7 +173,7 @@ class RoutingDetailsBloc extends Bloc<RoutingDetailsEvent, RoutingDetailsState> 
     _ChangeDefaultMode event,
     Emitter<RoutingDetailsState> emit,
   ) async {
-    final updatedData = state.data.copyWith(
+    final updatedData = state.initialData.copyWith(
       defaultMode: event.defaultMode,
     );
 
@@ -184,7 +185,9 @@ class RoutingDetailsBloc extends Bloc<RoutingDetailsEvent, RoutingDetailsState> 
     emit(
       state.copyWith(
         initialData: updatedData,
-        data: updatedData,
+        data: state.data.copyWith(
+          defaultMode: event.defaultMode,
+        ),
       ),
     );
     emit(state.copyWith(action: const RoutingDetailsAction.defaultModeChanged()));

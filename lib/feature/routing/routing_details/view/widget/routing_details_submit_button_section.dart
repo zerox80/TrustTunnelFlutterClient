@@ -25,7 +25,7 @@ class _Button extends StatelessWidget {
   @override
   Widget build(BuildContext context) => BlocBuilder<RoutingDetailsBloc, RoutingDetailsState>(
     buildWhen: (previous, current) => previous.action == current.action,
-    builder: (context, state) => FilledButton(
+    builder: (context,state) => FilledButton(
       onPressed: state.hasChanges && !state.hasInvalidRules ? () => _addRouting(context) : null,
       child: Text(
         state.isEditing ? context.ln.save : context.ln.add,

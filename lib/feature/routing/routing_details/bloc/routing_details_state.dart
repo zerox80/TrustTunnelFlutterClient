@@ -14,7 +14,15 @@ sealed class RoutingDetailsState with _$RoutingDetailsState {
 
   const RoutingDetailsState._();
 
-  bool get hasChanges => data != initialData;
+  bool get hasChanges {
+    print('''
+Bypass equals ${listEquals(data.bypassRules, initialData.bypassRules)},
+Vpn equals ${listEquals(data.vpnRules, initialData.vpnRules)},
+Default mode equals ${data.defaultMode == initialData.defaultMode}
+''');
+
+    return !listEquals(data.bypassRules, initialData.bypassRules) || !listEquals(data.vpnRules, initialData.vpnRules);
+  }
 
   bool get isEditing => routingId != null;
 }
