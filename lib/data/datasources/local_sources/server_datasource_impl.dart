@@ -137,6 +137,7 @@ class ServerDataSourceImpl implements ServerDataSource {
       vpnProtocol: VpnProtocol.values.firstWhere((p) => p.value == server.vpnProtocolId),
       dnsServers: dnsServers.map((e) => e.data).toList(),
       routingProfileId: server.routingProfileId,
+      selected: server.selected,
     );
   }
 

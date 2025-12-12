@@ -30,7 +30,7 @@ class _ServerDetailsViewState extends State<ServerDetailsView> {
           context.showInfoSnackBar(message: context.ln.serverCreatedSnackbar(name));
           break;
         case ServerDetailsSaved():
-          if (Navigator.canPop(context)) context.pop(result: ServerDetailsModificationResult.saved);
+          if (Navigator.canPop(context)) context.pop(result: state.data);
           context.showInfoSnackBar(message: context.ln.changesSavedSnackbar);
           break;
         case ServerDetailsDeleted(:final name):

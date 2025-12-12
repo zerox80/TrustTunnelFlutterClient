@@ -34,6 +34,7 @@ class RoutingDetailsScreenView extends StatelessWidget {
           listener: (innerContext, state) {
             final vpnController = VpnScope.vpnControllerOf(context);
             final serversBloc = context.read<ServersBloc>();
+            final routingProfilesBloc = context.read<RoutingBloc>();
             final excludedRoutesBloc = context.read<ExcludedRoutesBloc>();
             final routingProfile = RoutingProfile(
               id: state.routingId ?? -1,
@@ -42,6 +43,9 @@ class RoutingDetailsScreenView extends StatelessWidget {
               bypassRules: state.data.bypassRules,
               vpnRules: state.data.vpnRules,
             );
+
+            serversBloc.add(const ServersEvent.fetch());
+            routingProfilesBloc.add(const RoutingEvent.fetch());
 
             switch (state.action) {
               case RoutingDetailsPresentationError(:final error):
@@ -133,6 +137,7 @@ class RoutingDetailsScreenView extends StatelessWidget {
     ExcludedRoutesBloc excludedRoutesBloc,
   ) {
     final selectedServer = bloc.state.serverList.firstWhereOrNull((server) => server.id == bloc.state.selectedServerId);
+
     if (selectedServer != null) {
       bool picked = selectedServer.routingProfile.id == profile.id;
       bool running = controller.state != VpnState.disconnected;

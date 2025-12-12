@@ -111,6 +111,10 @@ class RoutingCard extends StatelessWidget {
       ),
     );
 
+    serversBloc.add(
+      const ServersEvent.fetch(),
+    );
+
     if (!context.mounted || result != RoutingProfileModificationResult.deleted) {
       return;
     }

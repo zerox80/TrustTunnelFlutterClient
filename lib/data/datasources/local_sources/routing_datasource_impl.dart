@@ -162,7 +162,6 @@ class RoutingDataSourceImpl implements RoutingDataSource {
           database.servers,
           db.ServersCompanion(
             routingProfileId: Value(replacedConfig.id),
-            selected: const Value(false),
           ),
           where: (s) => s.id.isIn(servers.map((s) => s.id)),
         );

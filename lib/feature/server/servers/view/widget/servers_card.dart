@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/data/model/server.dart';
 import 'package:vpn/data/model/vpn_state.dart';
+import 'package:vpn/feature/routing/routing/bloc/routing_bloc.dart';
+import 'package:vpn/feature/server/server_details/data/server_details_data.dart';
 import 'package:vpn/feature/server/server_details/data/server_details_modification_result.dart';
 import 'package:vpn/feature/server/server_details/view/server_details_popup.dart';
 import 'package:vpn/feature/server/servers/bloc/servers_bloc.dart';
@@ -93,7 +95,7 @@ class _ServersCardState extends State<ServersCard> {
   }) async {
     final serversBloc = context.read<ServersBloc>();
     final excludedRoutes = context.read<ExcludedRoutesBloc>().state.excludedRoutes;
-
+    final routingProfiles = context.read<RoutingBloc>().state.routingList;
     final result = await context.push(
       ServerDetailsPopUp(
         serverId: server.id,
@@ -104,10 +106,10 @@ class _ServersCardState extends State<ServersCard> {
     final picked = serversBloc.state.selectedServerId == server.id;
 
     if (picked && connected) {
-      if (result == ServerDetailsModificationResult.saved) {
+      if (result is ServerDetailsData) {
         vpnScope!.start(
           server: server,
-          routingProfile: server.routingProfile,
+          routingProfile: routingProfiles.firstWhere((p) => p.id == result.routingProfileId),
           excludedRoutes: excludedRoutes,
         );
       } else if (result == ServerDetailsModificationResult.deleted) {

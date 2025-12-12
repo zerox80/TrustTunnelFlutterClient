@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vpn/common/extensions/context_extensions.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vpn/feature/server/servers/bloc/servers_bloc.dart';
 import 'package:vpn/feature/server/servers/view/widget/servers_screen_view.dart';
 
@@ -14,7 +14,7 @@ class _ServersScreenState extends State<ServersScreen> {
   @override
   void initState() {
     super.initState();
-    context.blocFactory.serversBloc().add(
+    context.read<ServersBloc>().add(
       const ServersEvent.fetch(),
     );
   }
