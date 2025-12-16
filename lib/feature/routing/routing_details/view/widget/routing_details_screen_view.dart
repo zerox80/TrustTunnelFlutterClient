@@ -77,6 +77,12 @@ class RoutingDetailsScreenView extends StatelessWidget {
 
               case RoutingDetailsCleared():
                 innerContext.showInfoSnackBar(message: context.ln.allRulesDeleted);
+                onUpdated(
+                  vpnController,
+                  serversBloc,
+                  routingProfile,
+                  excludedRoutesBloc,
+                );
               case RoutingDetailsDefaultModeChanged():
                 innerContext.showInfoSnackBar(message: context.ln.changesSavedSnackbar);
                 onUpdated(
