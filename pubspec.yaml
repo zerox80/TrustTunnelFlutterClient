@@ -25,38 +25,33 @@ build_channel: Release
 
 environment:
   flutter: 3.38.3
-  sdk: '>=3.8.0 <4.0.0'
+  sdk: 3.10.1
 
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.20.2
+  intl: 0.20.2
   flutter_localizations:
     sdk: flutter
-  intl_utils: ^2.8.5
-  flutter_bloc: ^9.1.1
-  rxdart: ^0.28.0
-  package_info_plus: ^8.3.1
-  url_launcher: ^6.3.0
-  drift: ^2.28.2
-  path_provider: ^2.1.5
-  punycoder: ^0.2.2
+  intl_utils: 2.8.13
+  rxdart: 0.28.0
+  package_info_plus: 9.0.0
+  url_launcher: 6.3.2
+  drift: 2.30.0
+  path_provider: 2.1.5
+  punycoder: 0.2.2
   vpn_plugin:
     path: plugins/vpn_plugin
-  sqlite3_flutter_libs: ^0.5.39
+  sqlite3_flutter_libs: 0.5.41
   html: 0.15.6
-  bloc_concurrency: ^0.3.0
-  flutter_native_splash: ^2.4.7
+  flutter_native_splash: 2.4.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  drift_dev: ^2.28.3
-  flutter_lints: ^6.0.0
-  build_runner: ^2.7.1
-  freezed: ^3.2.0
-  json_serializable: ^6.3.1
-
+  drift_dev: 2.30.0
+  flutter_lints: 6.0.0
+  build_runner: 2.10.4
 
 flutter:
   generate: true

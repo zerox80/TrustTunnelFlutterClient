@@ -7,10 +7,23 @@ import 'package:vpn/data/model/server.dart';
 import 'package:vpn/data/model/vpn_log.dart';
 import 'package:vpn/data/model/vpn_state.dart';
 import 'package:vpn/data/repository/vpn_repository.dart';
-import 'package:vpn/feature/vpn/domain/entity/log_controller.dart';
-import 'package:vpn/feature/vpn/domain/entity/vpn_aspect.dart';
-import 'package:vpn/feature/vpn/domain/entity/vpn_controller.dart';
+import 'package:vpn/feature/vpn/models/log_controller.dart';
+import 'package:vpn/feature/vpn/models/vpn_aspect.dart';
+import 'package:vpn/feature/vpn/models/vpn_controller.dart';
 
+
+/// {@template vpn_scope_on_start_callback}
+/// Signature of the "start VPN" operation used by [VpnScope].
+///
+/// The callback starts a VPN session for the given [server] and [routingProfile]
+/// and applies [excludedRoutes] (typically CIDR ranges) as part of routing
+/// configuration.
+///
+/// The concrete behavior depends on the platform/backend implementation behind
+/// the repository, but the callback is expected to complete only after the
+/// start request has been handed off to the backend (not necessarily after a
+/// successful connection).
+/// {@endtemplate}
 typedef OnStartVpnCallback =
     Future<void> Function({
       required Server server,
@@ -18,11 +31,84 @@ typedef OnStartVpnCallback =
       required List<String> excludedRoutes,
     });
 
+/// {@template vpn_scope}
+/// Provides access to VPN state, logs, and control operations to a widget subtree.
+///
+/// `VpnScope` is an app-level scope built on top of [InheritedModel] that exposes
+/// two "controllers" to descendants:
+/// - a [VpnController] (VPN lifecycle + current [VpnState])
+/// - a [LogController] (collected [VpnLog] entries)
+///
+/// Descendants obtain these controllers using:
+/// - [VpnScope.vpnControllerOf] / [VpnScope.vpnControllerMaybeOf]
+/// - [VpnScope.logsControllerOf] / [VpnScope.logsControllerMaybeOf]
+///
+/// ## How updates and rebuilds work
+/// Internally, this scope uses [InheritedModel] with [VpnAspect] to support
+/// aspect-based subscriptions:
+/// - Consumers that subscribe to [VpnAspect.vpn] rebuild only when [VpnState]
+///   changes.
+/// - Consumers that subscribe to [VpnAspect.logs] rebuild only when the log list
+///   changes.
+/// - If a consumer requests both aspects, it may rebuild on either change.
+///
+/// To control whether your widget rebuilds:
+/// - Pass `listen: true` (default) to subscribe and rebuild on updates.
+/// - Pass `listen: false` to read the controller without subscribing.
+///
+/// ## VPN lifecycle and state
+/// `VpnScope` maintains a current [VpnState] value and updates it by subscribing
+/// to a state stream produced by [VpnRepository.startListenToStates].
+///
+/// Calling [VpnController.start] will:
+/// 1) stop any existing session (by calling [VpnController.stop]),
+/// 2) start listening to the new state stream,
+/// 3) update [VpnController.state] as new states arrive.
+///
+/// Calling [VpnController.stop] will:
+/// - call [VpnRepository.stop],
+/// - cancel any active VPN state subscription,
+/// - reset [VpnController.state] to [VpnState.disconnected].
+///
+/// ## Logs collection
+/// Logs are collected by subscribing to [VpnRepository.listenToLogs].
+/// The scope stores logs in memory and keeps only the most recent entries
+/// (see the internal log limit) to avoid unbounded growth.
+///
+/// ## Usage
+/// Place the scope above any widgets that need VPN state/control:
+///
+/// ```dart
+/// VpnScope(
+///   vpnRepository: repository,
+///   child: MyApp(),
+/// )
+/// ```
+///
+/// Then, inside the subtree:
+///
+/// ```dart
+/// final vpn = VpnScope.vpnControllerOf(context); // subscribes by default
+/// final logs = VpnScope.logsControllerOf(context, listen: false); // read only
+/// ```
+///
+/// ## Errors
+/// The `*Of` methods throw if called outside of a `VpnScope` subtree. Use the
+/// `*MaybeOf` variants if you want a nullable result instead.
+/// {@endtemplate}
 class VpnScope extends StatefulWidget {
+  /// Repository used to start/stop the VPN and to listen for state/log updates.
   final VpnRepository vpnRepository;
+
+  /// Initial state exposed before the repository provides real state updates.
+  ///
+  /// Defaults to [VpnState.disconnected].
   final VpnState initialState;
+
+  /// Widget subtree that receives access to the scope.
   final Widget child;
 
+  /// {@macro vpn_scope}
   const VpnScope({
     required this.child,
     required this.vpnRepository,
@@ -33,15 +119,51 @@ class VpnScope extends StatefulWidget {
   @override
   State<VpnScope> createState() => _VpnScopeState();
 
+  /// {@template vpn_scope_vpn_controller_maybe_of}
+  /// Returns the nearest [VpnController] from the widget tree, or `null`.
+  ///
+  /// If [listen] is `true` (default), the caller subscribes to [VpnAspect.vpn]
+  /// and will rebuild when the VPN state changes.
+  ///
+  /// If [listen] is `false`, the controller is read without establishing an
+  /// inherited dependency, so the caller will not rebuild automatically.
+  /// {@endtemplate}
   static VpnController? vpnControllerMaybeOf(BuildContext context, {bool listen = true}) =>
       _accessScope(context, listen: listen, aspect: VpnAspect.vpn);
 
+  /// {@template vpn_scope_vpn_controller_of}
+  /// Returns the nearest [VpnController] from the widget tree.
+  ///
+  /// If [listen] is `true` (default), the caller subscribes to [VpnAspect.vpn]
+  /// and will rebuild when the VPN state changes.
+  ///
+  /// Throws an [ArgumentError] if called outside of a [VpnScope] subtree.
+  /// Use [vpnControllerMaybeOf] when a nullable result is acceptable.
+  /// {@endtemplate}
   static VpnController vpnControllerOf(BuildContext context, {bool listen = true}) =>
       _accessScope(context, listen: listen, aspect: VpnAspect.vpn) ?? _notFoundInheritedWidgetOfExactType();
 
+  /// {@template vpn_scope_logs_controller_maybe_of}
+  /// Returns the nearest [LogController] from the widget tree, or `null`.
+  ///
+  /// If [listen] is `true` (default), the caller subscribes to [VpnAspect.logs]
+  /// and will rebuild when the logs list changes.
+  ///
+  /// If [listen] is `false`, the controller is read without establishing an
+  /// inherited dependency.
+  /// {@endtemplate}
   static LogController? logsControllerMaybeOf(BuildContext context, {bool listen = true}) =>
       _accessScope(context, listen: listen, aspect: VpnAspect.logs);
 
+  /// {@template vpn_scope_logs_controller_of}
+  /// Returns the nearest [LogController] from the widget tree.
+  ///
+  /// If [listen] is `true` (default), the caller subscribes to [VpnAspect.logs]
+  /// and will rebuild when the logs list changes.
+  ///
+  /// Throws an [ArgumentError] if called outside of a [VpnScope] subtree.
+  /// Use [logsControllerMaybeOf] when a nullable result is acceptable.
+  /// {@endtemplate}
   static LogController logsControllerOf(BuildContext context, {bool listen = true}) =>
       _accessScope(context, listen: listen, aspect: VpnAspect.logs) ?? _notFoundInheritedWidgetOfExactType();
 

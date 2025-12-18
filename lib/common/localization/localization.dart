@@ -6,9 +6,6 @@ import 'package:vpn/common/localization/locale_type.dart';
 final class Localization {
   static const _delegate = AppLocalizations.delegate;
 
-  /// Такой подход необходим в связи с тем
-  /// что приложение не должно предусматривать смену языка устройства
-  /// во время его работы, лишь при перезапуске.
   static Locale? _deviceLocale;
 
   const Localization._();

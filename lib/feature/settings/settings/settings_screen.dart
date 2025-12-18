@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
 import 'package:vpn/common/utils/url_utils.dart';
-import 'package:vpn/feature/settings/excluded_routes/view/excluded_routes_screen.dart';
-import 'package:vpn/feature/settings/query_log/view/query_log_screen.dart';
+import 'package:vpn/feature/settings/excluded_routes/widgets/excluded_routes_screen.dart';
+import 'package:vpn/feature/settings/query_log/widgets/query_log_screen.dart';
 import 'package:vpn/feature/settings/settings_about/about_screen.dart';
-import 'package:vpn/view/common/custom_arrow_list_tile.dart';
-import 'package:vpn/view/custom_app_bar.dart';
-import 'package:vpn/view/scaffold_wrapper.dart';
+import 'package:vpn/widgets/common/custom_arrow_list_tile.dart';
+import 'package:vpn/widgets/custom_app_bar.dart';
+import 'package:vpn/widgets/scaffold_wrapper.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});

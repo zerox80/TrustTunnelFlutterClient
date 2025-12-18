@@ -1,0 +1,4 @@
+enum ExcludedRoutesAspect {
+  data,
+  loading,
+}

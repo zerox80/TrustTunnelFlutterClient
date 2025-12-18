@@ -2,68 +2,37 @@ import 'dart:async';
 
 import 'package:flutter/material.dart' hide Router;
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vpn/common/extensions/context_extensions.dart';
-import 'package:vpn/di/common/initialization_helper.dart';
-import 'package:vpn/di/dependency_scope.dart';
+import 'package:vpn/di/model/initialization_helper.dart';
+import 'package:vpn/di/widgets/dependency_scope.dart';
 import 'package:vpn/feature/app/app.dart';
-import 'package:vpn/feature/initialization/initialization_bloc.dart';
-import 'package:vpn/feature/routing/routing/bloc/routing_bloc.dart';
-import 'package:vpn/feature/server/servers/bloc/servers_bloc.dart';
-import 'package:vpn/feature/settings/excluded_routes/bloc/excluded_routes_bloc.dart';
+import 'package:vpn/feature/routing/routing/widgets/scope/routing_scope.dart';
+import 'package:vpn/feature/server/servers/widget/scope/servers_scope.dart';
+import 'package:vpn/feature/settings/excluded_routes/widgets/scope/excluded_routes_scope.dart';
 import 'package:vpn/feature/vpn/widgets/vpn_scope.dart';
 
-void main() {
-  runZonedGuarded(
-    () {
-      final initializationBloc = InitializationBloc(initializationHelper: InitializationHelperIo())
-        ..add(const InitializationEvent.init());
+void main() => runZonedGuarded(
+  () async {
+    final initializationResult = await InitializationHelperIo().init();
 
-      initializationBloc.stream.listen(
-        (state) {
-          final result = state.initializationResult;
+    runApp(
+      DependencyScope(
+        dependenciesFactory: initializationResult.dependenciesFactory,
+        repositoryFactory: initializationResult.repositoryFactory,
 
-          if (result != null) {
-            runApp(
-              DependencyScope(
-                dependenciesFactory: result.dependenciesFactory,
-                blocFactory: result.blocFactory,
-                repositoryFactory: result.repositoryFactory,
-
-                child: MultiBlocProvider(
-                  providers: [
-                    BlocProvider<ServersBloc>(
-                      create: (context) => context.blocFactory.serversBloc()
-                        ..add(
-                          const ServersEvent.fetch(),
-                        ),
-                    ),
-                    BlocProvider<RoutingBloc>(
-                      create: (context) => context.blocFactory.routingBloc()
-                        ..add(
-                          const RoutingEvent.fetch(),
-                        ),
-                    ),
-                    BlocProvider<ExcludedRoutesBloc>(
-                      create: (context) => context.blocFactory.excludedRoutesBloc()
-                        ..add(
-                          const ExcludedRoutesEvent.init(),
-                        ),
-                    ),
-                  ],
-                  child: VpnScope(
-                    vpnRepository: result.repositoryFactory.vpnRepository,
-                    child: const App(),
-                  ),
-                ),
+        child: ServersScope(
+          child: RoutingScope(
+            child: ExcludedRoutesScope(
+              child: VpnScope(
+                vpnRepository: initializationResult.repositoryFactory.vpnRepository,
+                child: const App(),
               ),
-            );
-          }
-        },
-      );
-    },
-    (e, st) {
-      print('Error catched in main thread $e');
-    },
-  );
-}
+            ),
+          ),
+        ),
+      ),
+    );
+  },
+  (e, st) {
+    print('Error catched in main thread $e');
+  },
+);

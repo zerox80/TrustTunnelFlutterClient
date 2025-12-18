@@ -22,7 +22,6 @@ abstract class ValidationUtils {
       r'(?:[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?\.)+'
       r'(?:[A-Za-z]{2,63}|xn--[A-Za-z0-9-]{2,58}))$';
 
-  // DoH (https://host[/…], обычно /dns-query)
   static const dohRawRegex =
       r'^https://'
       r'(?:localhost|'
@@ -87,9 +86,10 @@ abstract class ValidationUtils {
     final split = cidr.split('/');
 
     final ipPart = split.first;
-    final postfix = int.tryParse(split.elementAtOrNull(1) ?? '');
+    final postfixPart = split.elementAtOrNull(1) ?? '';
+    final postfix = int.tryParse(postfixPart);
 
-    if (postfix == null) {
+    if (postfix == null || postfixPart.length != postfix.toString().length) {
       return false;
     }
 

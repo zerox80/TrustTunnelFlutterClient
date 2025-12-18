@@ -5,13 +5,27 @@ import 'package:vpn/data/model/raw/add_server_request.dart';
 import 'package:vpn/data/model/raw/raw_server.dart';
 import 'package:vpn/data/model/vpn_protocol.dart';
 
+/// {@template server_data_source_impl}
+/// Drift-backed implementation of [ServerDataSource].
+///
+/// Server records are stored in the `servers` table, while DNS server entries
+/// are stored in `dnsServers` and linked by `serverId`.
+///
+/// ### Consistency notes
+/// Some operations update multiple tables (server row + DNS rows). If strict
+/// atomicity is required, wrap these calls in a Drift transaction at a higher
+/// layer.
+/// {@endtemplate}
 class ServerDataSourceImpl implements ServerDataSource {
+  /// Drift database used for persistence.
   final db.AppDatabase database;
 
+  /// {@macro server_data_source_impl}
   ServerDataSourceImpl({
     required this.database,
   });
 
+  /// {@macro server_data_source_add_new_server}
   @override
   Future<RawServer> addNewServer({required AddServerRequest request}) async {
     final id = await database.servers.insertOnConflictUpdate(
@@ -48,6 +62,10 @@ class ServerDataSourceImpl implements ServerDataSource {
     );
   }
 
+  /// {@macro server_data_source_get_all_servers}
+  ///
+  /// This method loads server rows first, then loads DNS rows for all servers,
+  /// and finally assembles [RawServer] instances.
   @override
   Future<List<RawServer>> getAllServers() async {
     final serversRows = await database.select(database.servers).get();
@@ -80,6 +98,7 @@ class ServerDataSourceImpl implements ServerDataSource {
         .toList();
   }
 
+  /// {@macro server_data_source_set_selected_server_id}
   @override
   Future<void> setSelectedServerId({required int id}) async {
     final updatePrevious = database.servers.update()..where((e) => e.selected.equals(true));
@@ -89,9 +108,14 @@ class ServerDataSourceImpl implements ServerDataSource {
     await updateCurrent.write(const db.ServersCompanion(selected: Value(true)));
   }
 
+  /// {@macro server_data_source_remove_server}
   @override
   Future<void> removeServer({required int serverId}) => database.servers.deleteWhere((e) => e.id.equals(serverId));
 
+  /// {@macro server_data_source_set_new_server}
+  ///
+  /// DNS entries are fully replaced: existing rows are deleted and then the new
+  /// list is inserted.
   @override
   Future<void> setNewServer({required int id, required AddServerRequest request}) async {
     final update = database.servers.update()..where((e) => e.id.equals(id));
@@ -119,6 +143,9 @@ class ServerDataSourceImpl implements ServerDataSource {
     );
   }
 
+  /// {@macro server_data_source_get_server_by_id}
+  ///
+  /// Throws a generic [Exception] when the server row does not exist.
   @override
   Future<RawServer> getServerById({required int id}) async {
     final server = await (database.select(database.servers)..where((e) => e.id.equals(id))).getSingleOrNull();
@@ -141,6 +168,9 @@ class ServerDataSourceImpl implements ServerDataSource {
     );
   }
 
+  /// Loads DNS server rows for the given server ids.
+  ///
+  /// Rows are returned in insertion order (ascending by row id).
   Future<List<db.DnsServer>> _loadDnsAddresses(Set<int> serversIds) async {
     final select = database.select(database.dnsServers)
       ..where((r) => r.serverId.isIn(serversIds))

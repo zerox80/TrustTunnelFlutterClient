@@ -6,8 +6,6 @@
 
 #include <string.h>
 
-// ===================== МОДЕЛИ / ТИПЫ =====================
-
 typedef enum {
   VPN_STATE_DISCONNECTED = 0,
   VPN_STATE_CONNECTING   = 1,
@@ -30,7 +28,7 @@ typedef struct {
   gchar*  domain;
   gchar*  login;
   gchar*  password;
-  GPtrArray* dns_servers;   // gchar*
+  GPtrArray* dns_servers;
   gint64  routing_profile_id;
   VpnProtocol vpn_protocol;
 } Server;
@@ -39,8 +37,8 @@ typedef struct {
   gint64  id;
   gchar*  name;
   RoutingMode default_mode;
-  GPtrArray* bypass_rules;  // gchar*
-  GPtrArray* vpn_rules;     // gchar*
+  GPtrArray* bypass_rules;
+  GPtrArray* vpn_rules;
 } RoutingProfile;
 
 typedef struct {
@@ -55,17 +53,15 @@ typedef struct {
 } VpnRequest;
 
 typedef struct {
-  // данные
-  GPtrArray* servers;          // Server*
-  GPtrArray* routing_profiles; // RoutingProfile*
+  GPtrArray* servers;
+  GPtrArray* routing_profiles;
   gboolean   has_selected_server;
   gint64     selected_server_id;
   gchar*     excluded_routes;
   VpnState   vpn_state;
-  GPtrArray* requests;         // VpnRequest*
+  GPtrArray* requests;
 } MockStorage;
 
-// ===================== ВСПОМОГАТЕЛЬНЫЕ =====================
 
 static gchar* g_strdup_or_empty(const gchar* s) { return g_strdup(s ? s : ""); }
 
@@ -102,8 +98,6 @@ static gboolean is_valid_ipv4(const gchar* ip) {
   g_strfreev(parts);
   return ok;
 }
-
-// ===================== МОК-СТОРАДЖ =====================
 
 static Server* server_new(gint64 id, const gchar* ip, const gchar* domain,
                           const gchar* login, const gchar* pass,
@@ -227,7 +221,6 @@ static void storage_free(MockStorage* m) {
   g_free(m);
 }
 
-// ===================== ПЛАГИН =====================
 
 struct _VpnPlugin {
   GObject parent_instance;
@@ -244,7 +237,6 @@ struct _VpnPlugin {
   FlMethodChannel* ch_servers;
   FlMethodChannel* ch_routing;
 
-  // таймер для «подключения»
   guint connect_timeout_id;
 };
 
@@ -259,7 +251,6 @@ static void emit_vpn_state(VpnPlugin* self, VpnState st) {
 
 // -------- IVpnManager handlers (MethodChannel "ivpn_manager") --------
 static FlMethodResponse* ivpn_start(VpnPlugin* self) {
-  // connecting -> connected через 2с
   self->storage->vpn_state = VPN_STATE_CONNECTING;
   emit_vpn_state(self, self->storage->vpn_state);
 
@@ -441,7 +432,6 @@ static FlMethodResponse* servers_set(VpnPlugin* self, FlValue* args) {
   for (guint i = 0; i < self->storage->servers->len; i++) {
     Server* s = g_ptr_array_index(self->storage->servers, i);
     if (s->id == id) {
-      // заменить
       Server* updated = server_new(id, ip, domain, user, pass, dns, (VpnProtocol)proto, profile_id);
       server_free(s);
       g_ptr_array_index(self->storage->servers, i) = updated;
@@ -586,7 +576,6 @@ static FlStreamHandle* on_event_listen(FlEventChannel* channel,
                                        gpointer user_data) {
   VpnPlugin* self = VPN_PLUGIN(user_data);
   self->event_sink = fl_event_channel_create_stream(channel, NULL);
-  // отправим текущее состояние
   emit_vpn_state(self, self->storage->vpn_state);
   return (FlStreamHandle*)self->event_sink;
 }
@@ -616,7 +605,6 @@ static void vpn_plugin_init(VpnPlugin* self) {
   self->connect_timeout_id = 0;
 }
 
-// -------- Регистрация в движке --------
 void vpn_plugin_register_with_registrar(FlPluginRegistrar* registrar) {
   VpnPlugin* plugin = VPN_PLUGIN(g_object_new(vpn_plugin_get_type(), NULL));
   FlBinaryMessenger* messenger = fl_plugin_registrar_get_messenger(registrar);

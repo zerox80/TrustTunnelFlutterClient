@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vpn/common/assets/asset_icons.dart';
 import 'package:vpn/common/assets/font_families.dart';
 import 'package:vpn/common/extensions/theme_extensions.dart';
-import 'package:vpn/view/custom_icon.dart';
+import 'package:vpn/widgets/custom_icon.dart';
 
 class LightTheme {
   static const _accent = Color(0xFF3972AA);

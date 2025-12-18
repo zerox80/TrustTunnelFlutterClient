@@ -59,7 +59,7 @@ abstract class ErrorUtils {
     PlatformFieldName.ipAddress => PresentationFieldName.ipAddress,
   };
 
-  static PresentationError toPresentationError({required Object exception}) {
+  static PresentationError toPresentationError({required Object? exception}) {
     if (exception is! PlatformException || exception.details is! PlatformErrorResponse) {
       return PresentationBaseError(code: PresentationErrorCode.unknown);
     }

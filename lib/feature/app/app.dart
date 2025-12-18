@@ -2,7 +2,7 @@ import 'package:flutter/material.dart' hide Router;
 import 'package:flutter/material.dart';
 import 'package:vpn/common/extensions/context_extensions.dart';
 import 'package:vpn/common/localization/localization.dart';
-import 'package:vpn/feature/navigation/view/navigation_screen.dart';
+import 'package:vpn/feature/navigation/navigation_screen.dart';
 
 class App extends StatelessWidget {
   const App({super.key});

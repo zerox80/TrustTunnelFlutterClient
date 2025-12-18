@@ -1,7 +1,51 @@
 import 'dart:convert';
+
+import 'package:meta/meta.dart';
 import 'package:vpn_plugin/models/configuration.dart';
 
+/// {@template configuration_encoder}
+/// Encodes a high-level [Configuration] object into a textual VPN configuration.
+///
+/// This encoder is responsible for converting the structured Dart
+/// configuration model into a single configuration document understood by
+/// the native VPN backend. The output format is a stable, INI-like text file
+/// with sections and key-value pairs.
+///
+/// ### Responsibilities
+/// - Serialize all configuration sections (logging, endpoint, listener).
+/// - Apply consistent quoting and list formatting rules.
+/// - Normalize endpoint addresses by adding fallback ports when missing.
+///
+///
+/// The encoder is deterministic: identical [Configuration] inputs always
+/// produce identical output strings.
+///
+/// Instances are immutable and may be reused safely.
+/// {@endtemplate}
+@immutable
 final class ConfigurationEncoder extends Converter<Configuration, String> {
+  /// {@macro configuration_encoder}
+  const ConfigurationEncoder();
+
+  /// {@template configuration_encoder_convert}
+  /// Converts a [Configuration] into a backend configuration string.
+  ///
+  /// The returned string represents the full configuration file content and
+  /// can be passed directly to the VPN backend.
+  ///
+  /// ### Formatting rules
+  /// - `String` values are always emitted as quoted strings.
+  /// - Empty strings are emitted as `""`.
+  /// - Boolean and numeric values use their `toString()` representation.
+  /// - Lists are emitted in bracket notation: `["a", "b"]`.
+  /// - `null` list elements are omitted.
+  /// - Endpoint addresses without an explicit port receive a fallback port
+  ///   (`443` by default).
+  ///
+  /// ### Error handling
+  /// This method does not perform validation and does not throw under normal
+  /// circumstances. Invalid or unsupported values are serialized as-is.
+  /// {@endtemplate}
   @override
   String convert(Configuration configuration) {
     final String logLevel = _parseToConfigString(configuration.logLevel.value);
@@ -70,31 +114,52 @@ final class ConfigurationEncoder extends Converter<Configuration, String> {
     );
   }
 
+  /// {@template configuration_encoder_host_addresses}
+  /// Formats endpoint addresses into a configuration list.
+  ///
+  /// Each address may be an IPv4 or IPv6 literal, with or without a port.
+  /// If the port is missing, a fallback port is appended.
+  /// {@endtemplate}
+
   String _parseHostAddresses(List<String> addresses) {
     final resultList = addresses.map(_parseAddress);
-
     return _parseToConfigList(resultList);
   }
 
+  /// {@template configuration_encoder_address}
+  /// Normalizes a single endpoint address.
+  ///
+  /// If the address does not specify a port, [fallbackPort] is appended.
+  /// IPv6 literals are wrapped in square brackets when a port is added.
+  /// {@endtemplate}
   String _parseAddress(String address, {int fallbackPort = 443}) {
-    bool isIpv6 = RegExp(':').allMatches(address).length > 1;
-    final portDivider = isIpv6 ? ']:' : ':';
-    final divided = address.split(portDivider);
+    final bool isIpv6 = RegExp(':').allMatches(address).length > 1;
+    final String portDivider = isIpv6 ? ']:' : ':';
+    final List<String> divided = address.split(portDivider);
+
     if (divided.length == 1) {
       if (isIpv6) {
         address = '[$address]';
       }
-
       address = '$address:$fallbackPort';
     }
     return address;
   }
 
-  String _parseToConfigList(Iterable<Object?> list) {
-    final resultString = '[${list.nonNulls.map(_parseToConfigString).join(', ')}]';
-    return resultString;
-  }
+  /// {@template configuration_encoder_list}
+  /// Converts an iterable into a configuration list literal.
+  ///
+  /// `null` elements are skipped. All values are serialized using the same
+  /// rules as scalar configuration values.
+  /// {@endtemplate}
+  String _parseToConfigList(Iterable<Object?> list) => '[${list.nonNulls.map(_parseToConfigString).join(', ')}]';
 
+  /// {@template configuration_encoder_certificate}
+  /// Formats a PEM certificate for inclusion in the configuration.
+  ///
+  /// Non-empty certificates are wrapped in quotes and surrounded by line
+  /// breaks so the backend receives a multi-line string value.
+  /// {@endtemplate}
   String _parseCertificateToString(String certificate) {
     var certificateCopy = certificate;
     if (certificateCopy.isNotEmpty) {
@@ -103,14 +168,24 @@ final class ConfigurationEncoder extends Converter<Configuration, String> {
     return _parseToConfigString(certificateCopy);
   }
 
+  /// {@template configuration_encoder_scalar}
+  /// Converts a scalar value into its configuration string representation.
+  ///
+  /// Strings are always quoted; all other values use `toString()`.
+  /// {@endtemplate}
   String _parseToConfigString(Object object) {
     if (object is String) {
       return object.isEmpty ? '""' : '"$object"';
     }
-
     return object.toString();
   }
 
+  /// {@template configuration_encoder_template}
+  /// Assembles the final configuration document.
+  ///
+  /// This method interpolates already-formatted values into a static template.
+  /// It must not perform validation or transformation logic.
+  /// {@endtemplate}
   String _parseBaseConfiguration({
     required String logLevel,
     required String vpnMode,
@@ -224,7 +299,7 @@ anti_dpi = $antiDpi
 
 # Defines the way to listen to network traffic by the kind of the nested table.
 # Possible types:
-#   * socks: SOCKS5 proxy with UDP support,
+#   * socks: SOCKS proxy with UDP support,
 #   * tun: TUN device.
 [listener]
 

@@ -225,15 +225,11 @@ void VpnPlugin::RegisterWithRegistrar(flutter::PluginRegistrarWindows* registrar
       messenger, "vpn_plugin_event_channel", &flutter::StandardMethodCodec::GetInstance());
   event_channel->SetStreamHandler(std::unique_ptr<VpnEventStreamHandler>(handler.get()));
 
-  // ВНИМАНИЕ: Мы передаем владение handler в сам Plugin (см. конструктор ниже),
-  // а в SetStreamHandler — только «сырой» указатель, обёрнутый обратно в unique_ptr.
-
   auto vpn_manager = std::make_unique<IVpnManagerImpl>(storage.get(), handler.get(), ui_runner);
   auto storage_manager = std::make_unique<StorageManagerImpl>(storage.get());
   auto servers_manager = std::make_unique<ServersManagerImpl>(storage.get());
   auto routing_manager = std::make_unique<RoutingProfilesManagerImpl>(storage.get());
 
-  // Pigeon HostApi setUp — ЗАМЕНИТЬ на реальные вызовы из ваших заголовков
   IVpnManagerSetupSetUp(messenger, vpn_manager.get());
   IStorageManagerSetupSetUp(messenger, storage_manager.get());
   ServersManagerSetupSetUp(messenger, servers_manager.get());

@@ -12,13 +12,6 @@
 
 namespace vpn_plugin {
 
-// --------- BEGIN: Pigeon типы/интерфейсы (замени на реальные include'ы) ---------
-// TODO: #include "pigeon/ivpn_manager.g.h"
-// TODO: #include "pigeon/istorage_manager.g.h"
-// TODO: #include "pigeon/servers_manager.g.h"
-// TODO: #include "pigeon/routing_profiles_manager.g.h"
-
-// ВНИМАНИЕ: Ниже — временные объявления, чтобы код компилировался до подключения Pigeon.
 enum class VpnManagerState : int64_t { kDisconnected = 0, kConnecting = 1, kConnected = 2 };
 enum class VpnProtocol : int64_t { kQuic = 0, kHttp2 = 1 };
 enum class RoutingMode : int64_t { kVpn = 0, kBypass = 1 };
@@ -62,14 +55,11 @@ enum class AddNewServerResult : int64_t {
   kDnsServersIncorrect = 5
 };
 
-// TODO: замените на реальные setUp-функции из Pigeon
 void IVpnManagerSetupSetUp(flutter::BinaryMessenger*, void* /*api*/);
 void IStorageManagerSetupSetUp(flutter::BinaryMessenger*, void* /*api*/);
 void ServersManagerSetupSetUp(flutter::BinaryMessenger*, void* /*api*/);
 void RoutingProfilesManagerSetupSetUp(flutter::BinaryMessenger*, void* /*api*/);
-// --------- END: Pigeon заглушки ---------
 
-// ---------------- MockStorage ----------------
 class MockStorage {
  public:
   MockStorage();
@@ -92,7 +82,6 @@ class MockStorage {
   std::vector<VpnRequest> requests_;
 };
 
-// ---------------- StreamHandler для EventChannel ----------------
 class VpnEventStreamHandler
     : public flutter::StreamHandler<flutter::EncodableValue> {
  public:
@@ -116,7 +105,6 @@ class VpnEventStreamHandler
   std::unique_ptr<flutter::EventSink<flutter::EncodableValue>> sink_;
 };
 
-// ---------------- Реализации менеджеров ----------------
 class IVpnManagerImpl {
  public:
   IVpnManagerImpl(MockStorage* storage, VpnEventStreamHandler* handler,
@@ -185,7 +173,6 @@ class RoutingProfilesManagerImpl {
   MockStorage* storage_;
 };
 
-// ---------------- Сам плагин ----------------
 class VpnPlugin : public flutter::Plugin {
  public:
   static void RegisterWithRegistrar(flutter::PluginRegistrarWindows* registrar);
@@ -201,12 +188,10 @@ class VpnPlugin : public flutter::Plugin {
 
   ~VpnPlugin() override;
 
-  // Запрещаем копирование
   VpnPlugin(const VpnPlugin&) = delete;
   VpnPlugin& operator=(const VpnPlugin&) = delete;
 
  private:
-  // Никакого MethodChannel — используем только EventChannel + Pigeon HostApi
   std::unique_ptr<flutter::EventChannel<flutter::EncodableValue>> event_channel_;
   std::shared_ptr<MockStorage> storage_;
   std::unique_ptr<VpnEventStreamHandler> handler_;

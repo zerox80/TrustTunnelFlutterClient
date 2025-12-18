@@ -3,13 +3,12 @@ import 'package:vpn/common/extensions/theme_extensions.dart';
 import 'package:vpn/common/router/page/route/popup_route.dart';
 import 'package:vpn/common/utils/common_utils.dart';
 import 'package:vpn/data/model/breakpoint.dart';
-import 'package:vpn/di/dependency_scope.dart';
-import 'package:vpn/di/factory/bloc_factory.dart';
-import 'package:vpn/di/factory/dependency_factory.dart';
-import 'package:vpn/di/factory/repository_factory.dart';
-import 'package:vpn/view/arb_parser/arb_parser.dart';
-import 'package:vpn/view/common/scaffold_messenger_provider.dart';
-import 'package:vpn/view/custom_snack_bar.dart';
+import 'package:vpn/di/widgets/dependency_scope.dart';
+import 'package:vpn/di/model/dependency_factory.dart';
+import 'package:vpn/di/model/repository_factory.dart';
+import 'package:vpn/widgets/arb_parser/arb_parser.dart';
+import 'package:vpn/widgets/common/scaffold_messenger_provider.dart';
+import 'package:vpn/widgets/custom_snack_bar.dart';
 
 extension ScreenTypeExtension on BuildContext {
   Breakpoint get breakpoint => CommonUtils.getBreakpointByWidth(MediaQuery.of(this).size.width);
@@ -25,8 +24,6 @@ extension DependencyExtension on BuildContext {
   DependencyFactory get dependencyFactory => DependencyScope.getDependenciesFactory(this);
 
   RepositoryFactory get repositoryFactory => DependencyScope.getRepositoryFactory(this);
-
-  BlocFactory get blocFactory => DependencyScope.getBlocFactory(this);
 }
 
 extension ThemeContext on BuildContext {
