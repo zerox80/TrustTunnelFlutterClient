@@ -45,7 +45,7 @@ class RoutingSpellCheckService implements SpellCheckService {
     return ValidationUtils.validateIpAddress(modifiedAddress!, allowPort: !includeCIDR);
   }
 
-  bool validateDomain(String domain) => ValidationUtils.tryParseDomain(domain) != null;
+  bool validateDomain(String domain) => ValidationUtils.tryParseDomain(domain, allowFirstLevel: true) != null;
 
   bool _isValidToken(String s) => validateIp(s, includeCIDR: s.contains('/')) || validateDomain(s);
 }

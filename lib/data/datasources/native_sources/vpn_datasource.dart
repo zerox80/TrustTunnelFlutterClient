@@ -148,7 +148,7 @@ class VpnDataSourceImpl implements VpnDataSource {
     final Set<String> parsedAddresses = {};
 
     for (final exclusion in exclusions) {
-      final domainValue = ValidationUtils.tryParseDomain(exclusion);
+      final domainValue = ValidationUtils.tryParseDomain(exclusion, allowFirstLevel: true);
 
       if (domainValue == null) {
         parsedAddresses.add(exclusion);
