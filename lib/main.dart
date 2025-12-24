@@ -24,6 +24,7 @@ void main() => runZonedGuarded(
             child: ExcludedRoutesScope(
               child: VpnScope(
                 vpnRepository: initializationResult.repositoryFactory.vpnRepository,
+                initialState: initializationResult.initialVpnState,
                 child: const App(),
               ),
             ),
