@@ -74,53 +74,51 @@ class _ServerDetailsFullScreenViewState extends State<ServerDetailsFullScreenVie
   }
 
   @override
-  Widget build(BuildContext context) => SafeArea(
-    child: Scaffold(
-      body: CustomScrollView(
-        physics: const ClampingScrollPhysics(),
-        slivers: [
-          SliverToBoxAdapter(
-            child: CustomAppBar(
-              actions: [
+  Widget build(BuildContext context) => Scaffold(
+    body: CustomScrollView(
+      physics: const ClampingScrollPhysics(),
+      slivers: [
+        SliverToBoxAdapter(
+          child: CustomAppBar(
+            actions: [
                 if (_editing)
-                  CustomIconButton.square(
-                    icon: AssetIcons.delete,
-                    color: context.colors.error,
-                    size: 24,
-                    onPressed: () => _onDelete(context),
-                  ),
-              ],
-              leadingIconType: AppBarLeadingIconType.back,
-              centerTitle: true,
-              onBackPressed: () => widget.onDiscardChanges.call(_hasChanges),
-              title: _editing ? context.ln.editServer : context.ln.addServer,
-            ),
+                CustomIconButton.square(
+                  icon: AssetIcons.delete,
+                  color: context.colors.error,
+                  size: 24,
+                  onPressed: () => _onDelete(context),
+                ),
+            ],
+            leadingIconType: AppBarLeadingIconType.back,
+            centerTitle: true,
+            onBackPressed: () => widget.onDiscardChanges.call(_hasChanges),
+            title: _editing ? context.ln.editServer : context.ln.addServer,
           ),
-          SliverToBoxAdapter(
-            child: loading ? const SizedBox.shrink() : widget.body,
-          ),
-          SliverFillRemaining(
-            hasScrollBody: false,
-            fillOverscroll: true,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                const Spacer(),
-                const Divider(),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: FilledButton(
-                    onPressed: _hasChanges ? () => _submit(context) : null,
-                    child: Text(
-                      _editing ? context.ln.save : context.ln.add,
-                    ),
+        ),
+        SliverToBoxAdapter(
+          child: loading ? const SizedBox.shrink() : widget.body,
+        ),
+        SliverFillRemaining(
+          hasScrollBody: false,
+          fillOverscroll: true,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const Spacer(),
+              const Divider(),
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: FilledButton(
+                  onPressed: _hasChanges ? () => _submit(context) : null,
+                  child: Text(
+                    _editing ? context.ln.save : context.ln.add,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 

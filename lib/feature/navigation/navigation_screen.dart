@@ -18,40 +18,49 @@ class _NavigationScreenState extends State<NavigationScreen> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    backgroundColor: context.colors.backgroundSystem,
-    body: context.isMobileBreakpoint
-        ? _getContent()
-        : SafeArea(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ValueListenableBuilder(
-                  valueListenable: _selectedTabNotifier,
-                  builder: (context, index, _) => CustomNavigationRail(
+  Widget build(BuildContext context) => ColoredBox(
+    color: context.colors.background,
+    child: SafeArea(
+      right: false,
+      bottom: false,
+      left: false,
+      child: Scaffold(
+        backgroundColor: context.colors.backgroundSystem,
+        body: SafeArea(
+          top: false,
+          child: context.isMobileBreakpoint
+              ? _getContent()
+              : Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ValueListenableBuilder(
+                      valueListenable: _selectedTabNotifier,
+                      builder: (context, index, _) => CustomNavigationRail(
+                        selectedIndex: index,
+                        onDestinationSelected: _onDestinationSelected,
+                        destinations: NavigationUtils.getNavigationRailDestinations(context),
+                      ),
+                    ),
+                    Expanded(
+                      child: _getContent(),
+                    ),
+                  ],
+                ),
+        ),
+        bottomNavigationBar: context.isMobileBreakpoint
+            ? ValueListenableBuilder(
+                valueListenable: _selectedTabNotifier,
+                builder: (context, index, _) => SafeArea(
+                  child: NavigationBar(
                     selectedIndex: index,
                     onDestinationSelected: _onDestinationSelected,
-                    destinations: NavigationUtils.getNavigationRailDestinations(context),
+                    destinations: NavigationUtils.getBottomNavigationDestinations(context),
                   ),
                 ),
-                Expanded(
-                  child: _getContent(),
-                ),
-              ],
-            ),
-          ),
-    bottomNavigationBar: context.isMobileBreakpoint
-        ? ValueListenableBuilder(
-            valueListenable: _selectedTabNotifier,
-            builder: (context, index, _) => SafeArea(
-              child: NavigationBar(
-                selectedIndex: index,
-                onDestinationSelected: _onDestinationSelected,
-                destinations: NavigationUtils.getBottomNavigationDestinations(context),
-              ),
-            ),
-          )
-        : null,
+              )
+            : null,
+      ),
+    ),
   );
 
   Widget getScreenByIndex(int selectedIndex) => switch (selectedIndex) {

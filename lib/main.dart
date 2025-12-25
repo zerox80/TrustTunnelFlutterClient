@@ -18,7 +18,6 @@ void main() => runZonedGuarded(
       DependencyScope(
         dependenciesFactory: initializationResult.dependenciesFactory,
         repositoryFactory: initializationResult.repositoryFactory,
-
         child: ServersScope(
           child: RoutingScope(
             child: ExcludedRoutesScope(
