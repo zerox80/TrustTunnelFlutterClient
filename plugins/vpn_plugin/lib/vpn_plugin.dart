@@ -42,6 +42,20 @@ abstract class VpnPlugin {
   /// {@endtemplate}
   Future<VpnManagerState> getCurrentState();
 
+  /// {@template vpn_plugin_update_configuration}
+  /// Updates the VPN configuration for an existing VPN profile on iOS.
+  ///
+  /// This method has effect **only on iOS**. On other platforms it performs no
+  /// changes.
+  ///
+  /// The update is applied to the **system VPN profile** associated with
+  /// [serverName] and becomes visible in the iOS Settings app (VPN configuration
+  /// details for the selected profile).
+  ///
+  /// Throws a [PlatformException] if the configuration cannot be updated on iOS.
+  /// {@endtemplate}
+  Future<void> updateConfiguration({required String? serverName, required Configuration? configuration});
+
   /// {@template vpn_plugin_states}
   /// Stream of VPN connection state changes.
   ///
@@ -91,6 +105,18 @@ class VpnPluginImpl implements VpnPlugin {
   Future<void> start({required String serverName, required Configuration configuration}) {
     final config = const ConfigurationEncoder().convert(configuration);
     return _api.start(serverName: serverName, config: config);
+  }
+
+  /// {@macro vpn_plugin_update_configuration}
+  @override
+  Future<void> updateConfiguration({required String? serverName, required Configuration? configuration}) {
+    String? config;
+
+    if (configuration != null) {
+      config = const ConfigurationEncoder().convert(configuration);
+    }
+
+    return _api.updateConfiguration(serverName: serverName, config: config);
   }
 
   /// {@macro vpn_plugin_stop}

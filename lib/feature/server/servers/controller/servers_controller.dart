@@ -29,11 +29,12 @@ final class ServersController extends BaseStateController<ServersState> with Seq
         );
 
         final servers = await _repository.getAllServers();
+        final selectedServerId = servers.where((s) => s.selected).firstOrNull?.id;
 
         setState(
           ServersState.idle(
             servers: servers,
-            selectedServer: servers.where((s) => s.selected).firstOrNull?.id,
+            selectedServer: selectedServerId,
           ),
         );
       },
@@ -47,13 +48,6 @@ final class ServersController extends BaseStateController<ServersState> with Seq
     handle(
       () async {
         if (serverId == null) {
-          setState(
-            ServersState.idle(
-              servers: state.servers,
-              selectedServer: serverId,
-            ),
-          );
-
           return;
         }
 
@@ -68,10 +62,14 @@ final class ServersController extends BaseStateController<ServersState> with Seq
 
         await _repository.setSelectedServerId(id: serverId);
 
+        final selectedServerIndex = operatingServers.indexWhere((s) => s.id == serverId);
+
+        operatingServers[selectedServerIndex] = operatingServers[selectedServerIndex].copyWith(selected: true);
+
         setState(
           ServersState.idle(
             servers: operatingServers,
-            selectedServer: operatingServers.where((s) => s.id == serverId).firstOrNull?.id,
+            selectedServer: operatingServers[selectedServerIndex].id,
           ),
         );
       },

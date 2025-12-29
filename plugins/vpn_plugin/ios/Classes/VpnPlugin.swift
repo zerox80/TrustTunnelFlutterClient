@@ -57,6 +57,10 @@ final class IVpnManagerImpl: NSObject, IVpnManager, FlutterStreamHandler {
         vpnManager?.start(serverName: serverName, config: config)
     }
 
+    func updateConfiguration(serverName: String?, config: String?) throws {
+        vpnManager?.updateConfiguration(serverName: serverName, config: config)
+    }
+
     func stop() throws {
         vpnManager?.stop()
     }

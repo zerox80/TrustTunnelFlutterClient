@@ -23,7 +23,7 @@ import 'package:trusttunnel/feature/vpn/models/vpn_controller.dart';
 /// start request has been handed off to the backend (not necessarily after a
 /// successful connection).
 /// {@endtemplate}
-typedef OnStartVpnCallback =
+typedef UpdateVpnCallback =
     Future<void> Function({
       required Server server,
       required RoutingProfile routingProfile,
@@ -209,10 +209,18 @@ class _VpnScopeState extends State<VpnScope> {
       state: _stateNotifier.value,
       onStart: _start,
       onStop: _stop,
+      onUpdate: _updateConfiguration,
+      onDeleteConfiguration: _deleteConfiguration,
       child: child!,
     ),
     child: widget.child,
   );
+
+  Future<void> _deleteConfiguration() async {
+    await _stop();
+
+    return widget.vpnRepository.deleteConfiguration();
+  }
 
   Future<void> _start({
     required Server server,
@@ -228,6 +236,20 @@ class _VpnScopeState extends State<VpnScope> {
     );
 
     _vpnStreamSub = newServerStream.listen(_onVpnStateChanged);
+  }
+
+  Future<void> _updateConfiguration({
+    required Server server,
+    required RoutingProfile routingProfile,
+    required List<String> excludedRoutes,
+  }) async {
+    await _stop();
+
+    return widget.vpnRepository.updateConfiguration(
+      server: server,
+      routingProfile: routingProfile,
+      excludedRoutes: excludedRoutes,
+    );
   }
 
   Future<void> _stop() async {
@@ -262,7 +284,9 @@ class _VpnScopeState extends State<VpnScope> {
 
 class _InheritedVpnScope extends InheritedModel<VpnAspect> implements VpnController, LogController {
   final AsyncCallback _onStop;
-  final OnStartVpnCallback _onStart;
+  final AsyncCallback _onDeleteConfiguration;
+  final UpdateVpnCallback _onStart;
+  final UpdateVpnCallback _updateConfiguration;
 
   @override
   final List<VpnLog> logs;
@@ -271,13 +295,17 @@ class _InheritedVpnScope extends InheritedModel<VpnAspect> implements VpnControl
   final VpnState state;
 
   const _InheritedVpnScope({
-    required OnStartVpnCallback onStart,
+    required UpdateVpnCallback onStart,
+    required UpdateVpnCallback onUpdate,
     required AsyncCallback onStop,
+    required AsyncCallback onDeleteConfiguration,
     required this.state,
     required this.logs,
     required super.child,
   }) : _onStart = onStart,
-       _onStop = onStop;
+       _onStop = onStop,
+       _onDeleteConfiguration = onDeleteConfiguration,
+       _updateConfiguration = onUpdate;
 
   @override
   Future<void> start({
@@ -289,6 +317,13 @@ class _InheritedVpnScope extends InheritedModel<VpnAspect> implements VpnControl
     routingProfile: routingProfile,
     excludedRoutes: excludedRoutes,
   );
+
+  @override
+  Future<void> updateConfiguration({
+    required Server server,
+    required RoutingProfile routingProfile,
+    required List<String> excludedRoutes,
+  }) => _updateConfiguration(server: server, routingProfile: routingProfile, excludedRoutes: excludedRoutes);
 
   @override
   Future<void> stop() => _onStop();
@@ -308,6 +343,9 @@ class _InheritedVpnScope extends InheritedModel<VpnAspect> implements VpnControl
 
     return false;
   }
+
+  @override
+  Future<void> deleteConfiguration() => _onDeleteConfiguration();
 
   bool _shouldNotifyVpnController(_InheritedVpnScope oldWidget) => oldWidget.state != state;
 

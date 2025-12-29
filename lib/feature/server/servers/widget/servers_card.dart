@@ -70,6 +70,7 @@ class _ServersCardState extends State<ServersCard> {
 
   void _changeServer(BuildContext context, int? serverId) =>
       ServersScope.controllerOf(context, listen: false).pickServer(serverId);
+
   Future<void> _disconnectFromVpn(BuildContext context) {
     final controller = VpnScope.vpnControllerOf(context);
 
