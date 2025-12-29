@@ -111,6 +111,10 @@ class VpnPlugin :
         vpnImpl.stop()
     }
 
+    override fun updateConfiguration(serverName: String?, config: String?) {
+        // Do nothing, this is iOS specific
+    }
+
     override fun getCurrentState(): VpnManagerState {
         return vpnImpl.getCurrentState()
     }

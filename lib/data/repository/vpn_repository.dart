@@ -13,6 +13,14 @@ abstract class VpnRepository {
     required List<String> excludedRoutes,
   });
 
+  Future<void> updateConfiguration({
+    required Server server,
+    required RoutingProfile routingProfile,
+    required List<String> excludedRoutes,
+  });
+
+  Future<void> deleteConfiguration();
+
   Future<Stream<VpnLog>> listenToLogs();
 
   Future<VpnState> requestState();
@@ -50,4 +58,18 @@ class VpnRepositoryImpl implements VpnRepository {
 
   @override
   Future<VpnState> requestState() => _vpnDataSource.requestState();
+
+  @override
+  Future<void> updateConfiguration({
+    required Server server,
+    required RoutingProfile routingProfile,
+    required List<String> excludedRoutes,
+  }) => _vpnDataSource.updateConfiguration(
+    server: server,
+    routingProfile: routingProfile,
+    excludedRoutes: excludedRoutes,
+  );
+
+  @override
+  Future<void> deleteConfiguration() => _vpnDataSource.deleteConfiguration();
 }

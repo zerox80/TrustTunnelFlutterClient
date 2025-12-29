@@ -11,5 +11,13 @@ mixin VpnController {
     required List<String> excludedRoutes,
   });
 
+  Future<void> updateConfiguration({
+    required Server server,
+    required RoutingProfile routingProfile,
+    required List<String> excludedRoutes,
+  });
+
+  Future<void> deleteConfiguration();
+
   Future<void> stop();
 }

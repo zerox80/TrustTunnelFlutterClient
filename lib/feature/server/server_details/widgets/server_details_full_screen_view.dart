@@ -81,7 +81,7 @@ class _ServerDetailsFullScreenViewState extends State<ServerDetailsFullScreenVie
         SliverToBoxAdapter(
           child: CustomAppBar(
             actions: [
-                if (_editing)
+              if (_editing)
                 CustomIconButton.square(
                   icon: AssetIcons.delete,
                   color: context.colors.error,
@@ -195,45 +195,54 @@ class _ServerDetailsFullScreenViewState extends State<ServerDetailsFullScreenVie
     ExcludedRoutesScopeController excludedRoutesController,
     ServerDetailsData data, {
     bool deleted = false,
-  }) {
+  }) async {
+    final selectedServer = serverController.selectedServer;
+
+    final serverSelected = selectedServer?.id == (_id ?? -1);
+
+    final excludedRoutes = excludedRoutesController.excludedRoutes;
+
+    final running = controller.state != VpnState.disconnected;
+
     serverController.fetchServers();
 
-    final selectedServer = serverController.servers.firstWhereOrNull(
-      (server) => serverController.selectedServer?.id == _id,
-    );
+    if (!serverSelected) return;
 
-    final profile = profileController.routingList.firstWhereOrNull(
-      (profile) => profile.id == data.routingProfileId,
-    );
+    if (deleted) {
+      final fallbackServer = serverController.servers.firstWhereOrNull((s) => s.id != _id);
 
-    if (selectedServer != null && profile != null) {
-      bool running = controller.state != VpnState.disconnected;
-      final excludedRoutes = excludedRoutesController.excludedRoutes;
-
-      if (running) {
-        if (deleted) {
-          controller.stop();
-
-          return;
-        }
-
-        controller.start(
-          server: Server(
-            id: selectedServer.id,
-            name: data.serverName,
-            ipAddress: data.ipAddress,
-            domain: data.domain,
-            username: data.username,
-            password: data.password,
-            vpnProtocol: data.protocol,
-            dnsServers: data.dnsServers,
-            routingProfile: profile,
-            selected: selectedServer.selected,
-          ),
-          routingProfile: profile,
+      if (fallbackServer != null) {
+        await controller.updateConfiguration(
+          server: fallbackServer,
+          routingProfile: fallbackServer.routingProfile,
           excludedRoutes: excludedRoutes,
         );
+
+        serverController.pickServer(fallbackServer.id);
+      } else {
+        await controller.deleteConfiguration();
       }
     }
+
+    if (!running || deleted) return;
+
+    final server = Server(
+      id: selectedServer!.id,
+      name: data.serverName,
+      ipAddress: data.ipAddress,
+      domain: data.domain,
+      username: data.username,
+      password: data.password,
+      vpnProtocol: data.protocol,
+      dnsServers: data.dnsServers,
+      routingProfile: selectedServer.routingProfile,
+      selected: selectedServer.selected,
+    );
+
+    controller.start(
+      server: server,
+      routingProfile: server.routingProfile,
+      excludedRoutes: excludedRoutes,
+    );
   }
 }

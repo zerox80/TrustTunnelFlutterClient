@@ -54,6 +54,44 @@ abstract class VpnDataSource {
     required List<String> excludedRoutes,
   });
 
+  /// {@template vpn_data_source_update_configuration}
+  /// Updates the VPN configuration of an existing system VPN profile.
+  ///
+  /// This method has effect **only on iOS**. On other platforms it is expected
+  /// to be a no-op.
+  ///
+  /// The update is applied to the **system-level VPN configuration** associated
+  /// with the provided [server]. As a result, the changes become visible in the
+  /// iOS Settings app under the selected VPN profile.
+  ///
+  /// Implementations are responsible for:
+  /// - mapping domain models to the platform-specific configuration format,
+  /// - updating the existing VPN profile rather than creating a new one,
+  /// - preserving platform-managed metadata where applicable.
+  /// {@endtemplate}
+  Future<void> updateConfiguration({
+    required Server server,
+    required RoutingProfile routingProfile,
+    required List<String> excludedRoutes,
+  });
+
+  /// {@template vpn_data_source_delete_configuration}
+  /// Deletes an existing system VPN configuration.
+  ///
+  /// This method has effect **only on iOS**. On other platforms it is expected
+  /// to be a no-op.
+  ///
+  /// The call removes the **system-level VPN profile** previously created or
+  /// updated by this data source. As a result, the corresponding VPN entry
+  /// disappears from the iOS Settings app.
+  ///
+  /// This method does not implicitly manage the VPN session lifecycle. If the
+  /// VPN tunnel is currently running, implementations are expected to stop the
+  /// active session before deleting the configuration, or require the caller
+  /// to do so explicitly.
+  /// {@endtemplate}
+  Future<void> deleteConfiguration();
+
   /// {@template vpn_data_source_stop}
   /// Stops the VPN session.
   ///

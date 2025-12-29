@@ -131,6 +131,47 @@ class VpnDataSourceImpl implements VpnDataSource {
     return VpnStateFromApi.parse(state);
   }
 
+  @override
+  Future<void> updateConfiguration({
+    required Server server,
+    required RoutingProfile routingProfile,
+    required List<String> excludedRoutes,
+  }) {
+    final exclusions = _getExclusionsByMode(routingProfile);
+
+    final endPoint = Endpoint(
+      hostName: server.domain,
+      hasIpv6: false,
+      username: server.username,
+      password: server.password,
+      addresses: [
+        server.ipAddress,
+      ],
+      exclusions: exclusions,
+      dnsUpStreams: server.dnsServers,
+      upStreamProtocol: UpStreamProtocolEncoder().convert(
+        server.vpnProtocol,
+      ),
+    );
+
+    return _platformApi.updateConfiguration(
+      serverName: server.name,
+      configuration: Configuration(
+        vpnMode: VpnModeEncoder().convert(
+          routingProfile.defaultMode,
+        ),
+        endpoint: endPoint,
+        tun: Tun(
+          excludedRoutes: excludedRoutes,
+        ),
+        socks: Socks(),
+      ),
+    );
+  }
+
+  @override
+  Future<void> deleteConfiguration() => _platformApi.updateConfiguration(serverName: null, configuration: null);
+
   /// Computes the effective exclusion list based on routing mode.
   ///
   /// Domains are normalized to include wildcard variants when appropriate.

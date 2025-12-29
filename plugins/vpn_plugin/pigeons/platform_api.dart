@@ -86,6 +86,21 @@ abstract class IVpnManager {
   @TaskQueue(type: TaskQueueType.serialBackgroundThread)
   void stop();
 
+  /// {@template i_vpn_manager_update_configuration}
+  /// Updates the iOS system VPN profile or deletes it.
+  ///
+  /// The platform implementation should update the iOS system VPN profile
+  /// if the [serverName] and [config] are specified or delete the profile
+  /// entirely if one of them is `null`.
+  ///
+  /// This method should always be called on stopped VPN engine.
+  ///
+  /// This call is executed on a serial background task queue to avoid blocking
+  /// the platform UI thread.
+  /// {@endtemplate}
+  @TaskQueue(type: TaskQueueType.serialBackgroundThread)
+  void updateConfiguration({String? serverName, String? config});
+
   /// {@template i_vpn_manager_get_current_state}
   /// Returns the current VPN engine state.
   ///
