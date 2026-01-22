@@ -1,5 +1,16 @@
+def localProperties = new Properties()
+def localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localPropertiesFile.withInputStream { instr ->
+        localProperties.load(instr)
+    }
+}
+
 def getGprProp = { String name ->
     def v = project.findProperty(name)
+    if (v != null) return v.toString()
+
+    v = localProperties.getProperty(name)
     if (v != null) return v.toString()
 
     // fallback to env

@@ -1,6 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:trusttunnel/common/localization/generated/l10n.dart';
+import 'package:trusttunnel/common/localization/generated/app_localizations.dart';
 import 'package:trusttunnel/common/localization/locale_type.dart';
 
 final class Localization {
@@ -11,7 +11,7 @@ final class Localization {
   const Localization._();
 
   /// List of supported locales.
-  static List<Locale> get supportedLocales => _delegate.supportedLocales;
+  static List<Locale> get supportedLocales => AppLocalizations.supportedLocales;
 
   static List<Locale> get applicationLocales => List.of([
     defaultLocale,
@@ -27,7 +27,7 @@ final class Localization {
   ];
 
   /// Context-free translations.
-  static AppLocalizations get ln => AppLocalizations.current;
+  static AppLocalizations get ln => lookupAppLocalizations(defaultLocale);
 
   static Locale get deviceLocale => _deviceLocale ??= WidgetsBinding.instance.platformDispatcher.locale;
 
@@ -42,10 +42,10 @@ final class Localization {
 
   static bool get isDeviceLocaleSupported => _delegate.isSupported(deviceLocale);
 
-  static Future<AppLocalizations> load(Locale locale) => AppLocalizations.load(locale);
+  static Future<AppLocalizations> load(Locale locale) => AppLocalizations.delegate.load(locale);
 
   /// Obtain [AppLocalizations] instance from [BuildContext].
-  static AppLocalizations of(BuildContext context) => AppLocalizations.of(context);
+  static AppLocalizations of(BuildContext context) => AppLocalizations.of(context)!;
 }
 
 extension LocalizationContext on BuildContext {

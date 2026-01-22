@@ -6,7 +6,7 @@ import 'package:trusttunnel/common/error/model/presentation_base_error.dart';
 import 'package:trusttunnel/common/error/model/presentation_error.dart';
 import 'package:trusttunnel/common/error/model/presentation_field.dart';
 import 'package:trusttunnel/common/error/model/presentation_field_error.dart';
-import 'package:trusttunnel/common/localization/generated/l10n.dart';
+import 'package:trusttunnel/common/localization/generated/app_localizations.dart';
 import 'package:vpn_plugin/platform_api.g.dart';
 
 abstract class ErrorUtils {
