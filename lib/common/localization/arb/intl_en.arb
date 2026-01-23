@@ -114,5 +114,7 @@
   "quic": "QUIC",
   "http2": "HTTP/2",
   "bypass": "Bypass",
-  "vpn": "Vpn"
+  "vpn": "Vpn",
+  "copyDebugInfo": "Copy debug info",
+  "debugInfoCopied": "Debug info copied to clipboard"
 }

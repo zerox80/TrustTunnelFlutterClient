@@ -89,7 +89,7 @@ class VpnDataSourceImpl implements VpnDataSource {
 
     final endPoint = Endpoint(
       hostName: server.domain,
-      hasIpv6: false,
+      hasIpv6: true,
       username: server.username,
       password: server.password,
       addresses: [
@@ -141,7 +141,7 @@ class VpnDataSourceImpl implements VpnDataSource {
 
     final endPoint = Endpoint(
       hostName: server.domain,
-      hasIpv6: false,
+      hasIpv6: true,
       username: server.username,
       password: server.password,
       addresses: [
