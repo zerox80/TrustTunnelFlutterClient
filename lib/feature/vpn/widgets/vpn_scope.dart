@@ -185,6 +185,23 @@ class _VpnScopeState extends State<VpnScope> {
   late final ValueNotifier<List<VpnLog>> _logsNotifier;
   late final StreamSubscription<VpnLog> _logStreamSub;
   static const _logLimit = 500;
+  static const _reconnectDelays = [
+    Duration(seconds: 2),
+    Duration(seconds: 4),
+    Duration(seconds: 8),
+    Duration(seconds: 15),
+    Duration(seconds: 30),
+    Duration(seconds: 60),
+  ];
+
+  Timer? _reconnectTimer;
+  int _reconnectAttempt = 0;
+  bool _autoReconnectEnabled = false;
+  bool _startInProgress = false;
+
+  Server? _lastServer;
+  RoutingProfile? _lastRoutingProfile;
+  List<String>? _lastExcludedRoutes;
 
   @override
   void initState() {
@@ -227,15 +244,29 @@ class _VpnScopeState extends State<VpnScope> {
     required RoutingProfile routingProfile,
     required List<String> excludedRoutes,
   }) async {
-    await _stop();
+    if (_startInProgress) {
+      return;
+    }
+    _startInProgress = true;
+    _cancelReconnectTimer();
+    _lastServer = server;
+    _lastRoutingProfile = routingProfile;
+    _lastExcludedRoutes = List<String>.from(excludedRoutes);
+    _autoReconnectEnabled = true;
 
-    final newServerStream = await widget.vpnRepository.startListenToStates(
-      server: server,
-      routingProfile: routingProfile,
-      excludedRoutes: excludedRoutes,
-    );
+    await _stop(disableAutoReconnect: false);
 
-    _vpnStreamSub = newServerStream.listen(_onVpnStateChanged);
+    try {
+      final newServerStream = await widget.vpnRepository.startListenToStates(
+        server: server,
+        routingProfile: routingProfile,
+        excludedRoutes: excludedRoutes,
+      );
+
+      _vpnStreamSub = newServerStream.listen(_onVpnStateChanged);
+    } finally {
+      _startInProgress = false;
+    }
   }
 
   Future<void> _updateConfiguration({
@@ -252,7 +283,12 @@ class _VpnScopeState extends State<VpnScope> {
     );
   }
 
-  Future<void> _stop() async {
+  Future<void> _stop({bool disableAutoReconnect = true}) async {
+    if (disableAutoReconnect) {
+      _autoReconnectEnabled = false;
+      _reconnectAttempt = 0;
+    }
+    _cancelReconnectTimer();
     await widget.vpnRepository.stop();
     await _vpnStreamSub?.cancel();
     _stateNotifier.value = VpnState.disconnected;
@@ -261,6 +297,16 @@ class _VpnScopeState extends State<VpnScope> {
 
   void _onVpnStateChanged(VpnState state) {
     _stateNotifier.value = state;
+    if (state == VpnState.connected) {
+      _reconnectAttempt = 0;
+      _cancelReconnectTimer();
+      return;
+    }
+    if (state == VpnState.connecting) {
+      _cancelReconnectTimer();
+      return;
+    }
+    _scheduleReconnectIfNeeded();
   }
 
   void _onLogCollected(VpnLog log) {
@@ -275,10 +321,57 @@ class _VpnScopeState extends State<VpnScope> {
 
   @override
   void dispose() {
+    _autoReconnectEnabled = false;
+    _cancelReconnectTimer();
     _stop().ignore();
     _logStreamSub.cancel().ignore();
     _vpnStreamSub?.cancel().ignore();
     super.dispose();
+  }
+
+  void _scheduleReconnectIfNeeded() {
+    if (!_autoReconnectEnabled) {
+      return;
+    }
+    if (_lastServer == null || _lastRoutingProfile == null || _lastExcludedRoutes == null) {
+      return;
+    }
+    if (_reconnectTimer != null || _startInProgress) {
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+
+    final delayIndex =
+        _reconnectAttempt < _reconnectDelays.length ? _reconnectAttempt : _reconnectDelays.length - 1;
+    final delay = _reconnectDelays[delayIndex];
+    _reconnectAttempt += 1;
+
+    _reconnectTimer = Timer(delay, () async {
+      _reconnectTimer = null;
+      if (!_autoReconnectEnabled || _startInProgress || !mounted) {
+        return;
+      }
+      final currentState = _stateNotifier.value;
+      if (currentState == VpnState.connected || currentState == VpnState.connecting) {
+        return;
+      }
+      try {
+        await _start(
+          server: _lastServer!,
+          routingProfile: _lastRoutingProfile!,
+          excludedRoutes: List<String>.from(_lastExcludedRoutes!),
+        );
+      } catch (_) {
+        // Ignore to allow subsequent retries via state updates.
+      }
+    });
+  }
+
+  void _cancelReconnectTimer() {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = null;
   }
 }
 
