@@ -31,7 +31,7 @@ allprojects {
         google()
         mavenCentral()
         maven {
-            url = uri("https://maven.pkg.github.com/TrustTunnel/TrustTunnelClient")
+            url = uri("https://maven.pkg.github.com/zerox80/TrustTunnelClient")
             credentials {
                 username = ""
                 password = getGprProp("gpr.key")
