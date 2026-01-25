@@ -24,8 +24,7 @@ class NativeVpnImpl(
 
     init {
         VpnService.startNetworkManager(appContext)
-        val queryLogFile = File(appContext.filesDir, "query_log.dat")
-        VpnService.setAppNotifier(queryLogFile, this)
+        VpnService.setAppNotifier(this)
     }
 
     fun startPrepared(ctx: Context, config: String) {
